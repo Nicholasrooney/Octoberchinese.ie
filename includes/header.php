@@ -16,6 +16,9 @@ $nav = [
     'gallery'  => ['Gallery', 'gallery.php'],
     'catering' => ['Events', 'event-catering.php'],
     'visit'    => ['Visit', 'index.php#visit'],
+    // The second design (Hunan style) for the restaurant to compare. Remove
+    // this line once they have picked a design.
+    'october'  => ['October', 'october/'],
     'booking'  => ['Book a table', 'booking.php'],
 ];
 
