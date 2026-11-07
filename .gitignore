@@ -31,3 +31,6 @@ data/*.sqlite
 /*.html
 # ...except Google Search Console's verification file, which must deploy
 !/google*.html
+
+# Local publish helper - not website content
+/*.bat
