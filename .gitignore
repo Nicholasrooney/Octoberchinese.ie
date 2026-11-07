@@ -34,3 +34,8 @@ data/*.sqlite
 
 # Local publish helper - not website content
 /*.bat
+
+# Auto-publish helpers and log - not website content
+/*.cmd
+/*.vbs
+/*.log
