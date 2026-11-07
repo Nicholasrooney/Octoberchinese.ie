@@ -1,0 +1,324 @@
+<?php
+/*
+ * Opening hours — the single source of truth.
+ *
+ * Everything derives from $booking['service_hours']: the hours shown on the
+ * site, the structured data Google reads, and which time slots the booking
+ * form offers on a given day. Change the hours in one place and all three
+ * move together.
+ *
+ * This matters more than it looks. Before this existed the booking form
+ * offered the same slots every day, so it would happily take a table for a
+ * Monday the café is shut.
+ */
+
+/** Days in week order, with the keys used in config. */
+function hours_day_names(): array
+{
+    return [
+        'mon' => 'Monday', 'tue' => 'Tuesday', 'wed' => 'Wednesday',
+        'thu' => 'Thursday', 'fri' => 'Friday', 'sat' => 'Saturday', 'sun' => 'Sunday',
+    ];
+}
+
+function hours_config(): array
+{
+    return $GLOBALS['booking']['service_hours'] ?? [];
+}
+
+/**
+ * Opening and closing time for a date, or null when the café is closed.
+ *
+ * @return array{0:string,1:string}|null
+ */
+function hours_for_date(string $date, ?array $service = null): ?array
+{
+    $service = $service ?? hours_config();
+
+    $day = DateTimeImmutable::createFromFormat('!Y-m-d', $date, new DateTimeZone('Europe/Dublin'));
+    if (!$day) {
+        return null;
+    }
+
+    $key   = strtolower($day->format('D'));   // mon, tue, ...
+    $entry = $service[$key] ?? null;
+
+    return is_array($entry) && count($entry) === 2 ? $entry : null;
+}
+
+function hours_is_open(string $date, ?array $service = null): bool
+{
+    return hours_for_date($date, $service) !== null;
+}
+
+/**
+ * The bookable slots for a date.
+ *
+ * Runs from opening to a set number of minutes before closing, because a table
+ * booked five minutes before the doors shut is no use to anybody.
+ */
+function hours_slots_for_date(string $date, ?array $service = null, ?int $slotMinutes = null, ?int $buffer = null): array
+{
+    $window = hours_for_date($date, $service);
+    if (!$window) {
+        return [];
+    }
+
+    $slotMinutes = $slotMinutes ?? (int) ($GLOBALS['booking']['slot_minutes'] ?? 30);
+    $buffer      = $buffer      ?? (int) ($GLOBALS['booking']['last_booking_before_close'] ?? 60);
+
+    $tz    = new DateTimeZone('Europe/Dublin');
+    $open  = new DateTimeImmutable($date . ' ' . $window[0], $tz);
+    $close = (new DateTimeImmutable($date . ' ' . $window[1], $tz))->modify("-$buffer minutes");
+
+    $slots = [];
+    for ($t = $open; $t <= $close; $t = $t->modify("+$slotMinutes minutes")) {
+        $slots[] = $t->format('H:i');
+    }
+
+    return $slots;
+}
+
+/**
+ * Every slot the café ever offers, across all days. The staff form uses this
+ * so they can put a booking anywhere, including outside normal service.
+ */
+function hours_all_slots(?array $service = null): array
+{
+    $service = $service ?? hours_config();
+    $slots   = [];
+
+    // Any Monday-to-Sunday week will do; we only want the times.
+    $monday = (new DateTimeImmutable('monday this week', new DateTimeZone('Europe/Dublin')));
+    for ($i = 0; $i < 7; $i++) {
+        $slots = array_merge($slots, hours_slots_for_date($monday->modify("+$i days")->format('Y-m-d'), $service));
+    }
+
+    $slots = array_values(array_unique($slots));
+    sort($slots);
+
+    return $slots;
+}
+
+/**
+ * Hours for display, with runs of identical days grouped:
+ *
+ *     ['Tuesday to Friday' => '09:00 to 16:00',
+ *      'Saturday & Sunday' => '09:00 to 17:00',
+ *      'Monday'            => 'Closed']
+ */
+function hours_display(?array $service = null): array
+{
+    $service = $service ?? hours_config();
+    $names   = hours_day_names();
+
+    // Group consecutive days that share the same hours.
+    $groups = [];
+    foreach ($names as $key => $name) {
+        $entry = $service[$key] ?? null;
+        $value = is_array($entry) && count($entry) === 2 ? $entry[0] . ' to ' . $entry[1] : 'Closed';
+
+        if ($groups && end($groups)['value'] === $value) {
+            $groups[count($groups) - 1]['days'][] = $name;
+        } else {
+            $groups[] = ['days' => [$name], 'value' => $value];
+        }
+    }
+
+    $out = [];
+    foreach ($groups as $group) {
+        $days  = $group['days'];
+        $count = count($days);
+
+        if ($count === 1) {
+            $label = $days[0];
+        } elseif ($count === 2) {
+            $label = $days[0] . ' & ' . $days[1];
+        } else {
+            $label = $days[0] . ' to ' . $days[$count - 1];
+        }
+
+        $out[$label] = $group['value'];
+    }
+
+    return $out;
+}
+
+/**
+ * schema.org OpeningHoursSpecification, built from the same source.
+ *
+ * Closed days are stated explicitly rather than omitted — Google treats a
+ * missing day as unknown, but an explicit closure shows as "Closed" in the
+ * search result, which is what stops somebody driving over on a Monday.
+ */
+function hours_schema(?array $service = null): array
+{
+    $service = $service ?? hours_config();
+    $names   = hours_day_names();
+    $out     = [];
+
+    foreach ($names as $key => $name) {
+        $entry = $service[$key] ?? null;
+
+        if (is_array($entry) && count($entry) === 2) {
+            $out[] = [
+                '@type'     => 'OpeningHoursSpecification',
+                'dayOfWeek' => 'https://schema.org/' . $name,
+                'opens'     => $entry[0],
+                'closes'    => $entry[1],
+            ];
+        } else {
+            $out[] = [
+                '@type'     => 'OpeningHoursSpecification',
+                'dayOfWeek' => 'https://schema.org/' . $name,
+                'opens'     => '00:00',
+                'closes'    => '00:00',
+            ];
+        }
+    }
+
+    return $out;
+}
+
+/*
+ * ---------------------------------------------------------------------------
+ * The weekend pause
+ *
+ * Staff press one button in the diary to stop taking online bookings for the
+ * weekend that is coming up. It rolls forward on its own: what is stored is
+ * the Sunday the pause applies to, not a yes/no flag, so once that Sunday has
+ * gone by the stored value no longer matches the weekend being offered and
+ * bookings are open again. No cron job, nothing to remember to undo, and no
+ * way for one busy Saturday to quietly close every weekend after it.
+ * ---------------------------------------------------------------------------
+ */
+
+/**
+ * The Sunday that identifies the weekend currently being offered.
+ *
+ * Today, if today is a Sunday — pressing the button mid-weekend should shut
+ * the rest of that weekend, not next one. Otherwise the next Sunday.
+ */
+function hours_weekend_id(?string $today = null): string
+{
+    $tz  = new DateTimeZone('Europe/Dublin');
+    $day = $today === null
+        ? new DateTimeImmutable('today', $tz)
+        : (DateTimeImmutable::createFromFormat('!Y-m-d', $today, $tz) ?: new DateTimeImmutable('today', $tz));
+
+    return $day->format('D') === 'Sun'
+        ? $day->format('Y-m-d')
+        : $day->modify('next sunday')->format('Y-m-d');
+}
+
+/**
+ * Every date in the weekend that hours_weekend_id() identifies.
+ *
+ * Counted back from the Sunday, so the Friday belongs to the weekend it leads
+ * into rather than the one just gone.
+ */
+function hours_weekend_dates(?string $today = null, ?array $days = null): array
+{
+    $days = $days ?? ($GLOBALS['booking']['weekend_days'] ?? ['sat', 'sun']);
+
+    $sunday = new DateTimeImmutable(hours_weekend_id($today), new DateTimeZone('Europe/Dublin'));
+    $offset = ['mon' => 6, 'tue' => 5, 'wed' => 4, 'thu' => 3, 'fri' => 2, 'sat' => 1, 'sun' => 0];
+
+    $dates = [];
+    foreach ($days as $key) {
+        $key = strtolower(substr((string) $key, 0, 3));
+        if (isset($offset[$key])) {
+            $dates[] = $sunday->modify('-' . $offset[$key] . ' days')->format('Y-m-d');
+        }
+    }
+
+    sort($dates);
+
+    return $dates;
+}
+
+/** Has the weekend being offered been paused from the staff area? */
+function hours_weekend_paused(?string $today = null): bool
+{
+    require_once __DIR__ . '/settings.php';
+
+    $paused = setting_get('paused_weekend');
+
+    return $paused !== null && $paused === hours_weekend_id($today);
+}
+
+/**
+ * Pause or un-pause the weekend being offered.
+ *
+ * Writing the Sunday rather than a flag is what makes this self-expiring.
+ */
+function hours_set_weekend_paused(bool $paused, string $actor = ''): bool
+{
+    require_once __DIR__ . '/settings.php';
+
+    return setting_set('paused_weekend', $paused ? hours_weekend_id() : null, $actor);
+}
+
+/**
+ * Is this a date we have stopped taking new bookings for?
+ *
+ * Separate from the weekly closed days: the café may well be open and simply
+ * full, so the wording differs and the day still shows in the staff diary.
+ *
+ * @return string|null  the message to show, or null if bookings are open
+ */
+function hours_blocked_message(string $date, ?array $blocked = null): ?string
+{
+    $blocked = $blocked ?? ($GLOBALS['booking']['no_bookings_dates'] ?? []);
+    $default = 'We are not taking any more bookings that day.';
+
+    // Accepts either a plain list of dates or a date => message map.
+    if (array_key_exists($date, $blocked)) {
+        return trim((string) $blocked[$date]) !== '' ? (string) $blocked[$date] : $default;
+    }
+
+    if (in_array($date, $blocked, true)) {
+        return $default;
+    }
+
+    // The staff toggle. Checked after the hand-written list so a specific
+    // reason somebody typed for a date still wins over the generic wording.
+    if (hours_weekend_paused() && in_array($date, hours_weekend_dates(), true)) {
+        $message = trim((string) ($GLOBALS['booking']['weekend_paused_message'] ?? ''));
+        return $message !== '' ? $message : $default;
+    }
+
+    return null;
+}
+
+/**
+ * Can the public form offer this date at all?
+ */
+function hours_takes_bookings(string $date): bool
+{
+    return hours_is_open($date) && hours_blocked_message($date) === null;
+}
+
+/**
+ * The next date the café is actually open, for pointing people somewhere
+ * useful when they land on a closed day.
+ */
+function hours_next_open_date(string $from, ?array $service = null): ?string
+{
+    $tz  = new DateTimeZone('Europe/Dublin');
+    $day = DateTimeImmutable::createFromFormat('!Y-m-d', $from, $tz);
+    if (!$day) {
+        return null;
+    }
+
+    for ($i = 0; $i < 14; $i++) {
+        $candidate = $day->modify("+$i days")->format('Y-m-d');
+        // Skip days we have stopped taking bookings for: suggesting one would
+        // send people straight into another refusal.
+        if (hours_is_open($candidate, $service) && hours_blocked_message($candidate) === null) {
+            return $candidate;
+        }
+    }
+
+    return null;
+}

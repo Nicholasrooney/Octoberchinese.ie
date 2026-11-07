@@ -1,0 +1,107 @@
+-- October Chinese Dining — bookings schema (MySQL / MariaDB)
+--
+-- Run once in Hostinger: hPanel > Databases > phpMyAdmin > Import.
+-- Safe to re-run: every statement is IF NOT EXISTS.
+--
+-- Note on status/source columns: these are VARCHAR with the allowed values
+-- enforced in PHP (booking_statuses() / booking_sources()), not MySQL ENUM.
+-- Adding a status to an ENUM needs an ALTER TABLE on a live table; this way it
+-- is a one-line code change. It also lets the test suite run the same SQL on
+-- SQLite.
+
+CREATE TABLE IF NOT EXISTS customers (
+    id                    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name                  VARCHAR(120)  NOT NULL,
+    phone                 VARCHAR(32)   NOT NULL,
+    phone_key             VARCHAR(20)   NOT NULL,
+    email                 VARCHAR(190)  NOT NULL,
+    notes                 TEXT          NULL,
+    marketing_consent     TINYINT       NOT NULL DEFAULT 0,
+    marketing_consent_at  DATETIME      NULL,
+    created_at            DATETIME      NOT NULL,
+    updated_at            DATETIME      NOT NULL,
+    anonymised_at         DATETIME      NULL,
+    UNIQUE KEY uq_customers_phone_key (phone_key),
+    KEY idx_customers_email (email),
+    KEY idx_customers_name  (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS bookings (
+    id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    customer_id     INT UNSIGNED NOT NULL,
+    booking_date    DATE         NOT NULL,
+    booking_time    VARCHAR(5)   NOT NULL,
+    guests          SMALLINT     NOT NULL,
+    seating         VARCHAR(40)  NOT NULL,
+    notes           TEXT         NULL,
+    status          VARCHAR(20)  NOT NULL DEFAULT 'requested',
+    source          VARCHAR(20)  NOT NULL DEFAULT 'website',
+    google_event_id VARCHAR(255) NULL,
+    changed_by      VARCHAR(60)  NOT NULL DEFAULT 'staff',
+    created_at      DATETIME     NOT NULL,
+    updated_at      DATETIME     NOT NULL,
+    CONSTRAINT fk_bookings_customer
+        FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+    KEY idx_bookings_date_time (booking_date, booking_time),
+    KEY idx_bookings_status    (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- No foreign key here on purpose: the audit trail has to outlive the booking
+-- it describes, otherwise deleting a booking quietly erases its own history.
+CREATE TABLE IF NOT EXISTS booking_audit (
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    booking_id  INT UNSIGNED NOT NULL,
+    action      VARCHAR(40)  NOT NULL,
+    old_status  VARCHAR(20)  NULL,
+    new_status  VARCHAR(20)  NULL,
+    actor       VARCHAR(60)  NOT NULL,
+    ip          VARCHAR(45)  NULL,
+    at          DATETIME     NOT NULL,
+    KEY idx_audit_booking (booking_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Catering enquiries from event-catering.php.
+--
+-- Deliberately separate from bookings/customers: an enquiry is a sales lead,
+-- not a table, and it often arrives with only a phone number or an email from
+-- the price card. price_per_person and estimate_total record what the visitor
+-- was shown at the time, so a later menu price change does not rewrite history.
+CREATE TABLE IF NOT EXISTS catering_enquiries (
+    id                 INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    source             VARCHAR(20)  NOT NULL DEFAULT 'full_form',
+    name               VARCHAR(120) NOT NULL DEFAULT '',
+    phone              VARCHAR(32)  NOT NULL DEFAULT '',
+    email              VARCHAR(190) NOT NULL DEFAULT '',
+    occasion           VARCHAR(40)  NOT NULL DEFAULT '',
+    event_date         DATE         NULL,
+    guests             SMALLINT     NOT NULL,
+    location           VARCHAR(200) NOT NULL DEFAULT '',
+    package            VARCHAR(40)  NOT NULL DEFAULT '',
+    price_per_person   DECIMAL(8,2) NULL,
+    estimate_total     INT          NULL,
+    fulfilment         VARCHAR(20)  NOT NULL DEFAULT '',
+    delivery_address   TEXT         NULL,
+    notes              TEXT         NULL,
+    marketing_consent  TINYINT      NOT NULL DEFAULT 0,
+    status             VARCHAR(20)  NOT NULL DEFAULT 'new',
+    staff_notes        TEXT         NULL,
+    created_at         DATETIME     NOT NULL,
+    updated_at         DATETIME     NOT NULL,
+    KEY idx_catering_status  (status),
+    KEY idx_catering_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*
+ * Settings staff change from the website, as key/value pairs.
+ *
+ * Here rather than in config.php because config.php is tracked in git: a
+ * weekend somebody paused from the staff area would be silently un-paused by
+ * the next deploy. The database survives deploys.
+ */
+CREATE TABLE IF NOT EXISTS settings (
+    setting_key    VARCHAR(60)  NOT NULL,
+    setting_value  TEXT         NULL,
+    updated_by     VARCHAR(60)  NOT NULL DEFAULT '',
+    updated_at     DATETIME     NOT NULL,
+    PRIMARY KEY (setting_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

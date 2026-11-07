@@ -1,0 +1,33 @@
+# Customer booking data — never commit, never overwrite on deploy
+data/bookings.csv
+
+# Source archives / backups
+*.zip
+
+# OS cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Staging folder for source photos/menu scans — not site content
+Extras/
+
+# Credentials — never commit.
+# Deny the whole secrets folder, then allow back only the two files that are
+# meant to be in the repo. Safer than listing extensions: a new secret dropped
+# in here is ignored by default rather than committed by accident.
+includes/secrets/*
+!includes/secrets/.htaccess
+!includes/secrets/README.md
+
+data/.google-token.json
+data/*.log
+data/*.sqlite
+
+# Scratch output from web lookups
+.firecrawl/
+
+# Scratch output from local testing
+/*.html
+# ...except Google Search Console's verification file, which must deploy
+!/google*.html
