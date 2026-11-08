@@ -148,3 +148,7 @@
 .track-ready { background: #eaf5ec; color: #1e5a2e; padding: 14px 16px; border-radius: var(--radius); font-weight: 500; }
 .track-help { font-size: .9rem; color: var(--muted); margin-top: 18px; }
 @media (max-width: 560px) { .track-card { padding: 22px 18px; } .track-steps li { font-size: .68rem; } }
+
+/* Quick add feedback for dishes with nothing to choose */
+.order-item.is-added .oi-add { animation: oi-pop .45s ease; background: var(--copper); }
+@keyframes oi-pop { 40% { transform: scale(1.25); } }

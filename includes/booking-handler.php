@@ -33,6 +33,9 @@ $old    = [
     'name' => '', 'phone' => '', 'email' => '', 'date' => '',
     'time' => '', 'guests' => '2', 'seating' => $booking['seating'][0], 'notes' => '',
 ];
+// The time the visitor would like, used to pick which free times to show
+// first. Not part of the booking itself.
+$prefTime = '19:00';
 $consent   = false;
 $confirmed = $_SESSION['booking_confirmed'] ?? null;
 unset($_SESSION['booking_confirmed']);
@@ -40,7 +43,21 @@ unset($_SESSION['booking_confirmed']);
 $today   = new DateTimeImmutable('today', new DateTimeZone('Europe/Dublin'));
 $lastDay = $today->modify('+' . (int) $booking['days_ahead'] . ' days');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// "Find a table" without JavaScript: re-show the form with times for the
+// chosen date and party size, without treating it as a booking attempt.
+$finding = $_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['find']);
+if ($finding || $_SERVER['REQUEST_METHOD'] === 'GET') {
+    $src = $finding ? $_POST : $_GET;
+    foreach (['date', 'guests'] as $f) {
+        if (isset($src[$f])) $old[$f] = trim((string) $src[$f]);
+    }
+}
+if (isset($_POST['pref']) || isset($_GET['pref'])) {
+    $p = (string) ($_POST['pref'] ?? $_GET['pref']);
+    if (preg_match('/^\d{2}:\d{2}$/', $p)) $prefTime = $p;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$finding) {
     foreach ($old as $field => $default) {
         $old[$field] = trim((string) ($_POST[$field] ?? ''));
     }

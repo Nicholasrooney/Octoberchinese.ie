@@ -197,7 +197,6 @@
       return '<label class="od-opt"><input type="checkbox" name="addon" value="' + k + '"><span>' + esc(it.addons[k].label) + '</span><span class="od-opt-price">+' + money(it.addons[k].price) + '</span></label>';
     }).join('') : '';
 
-    $('[data-od-note]').value = '';
     $('[data-od-error]').hidden = true;
     dialogPrice();
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
@@ -227,7 +226,6 @@
       var err = $('[data-od-error]'); err.hidden = false; err.textContent = 'Please choose an option.';
       return;
     }
-    cur.note = $('[data-od-note]').value.trim().slice(0, 140);
     add(cur);
     flash(it.name);
   });
@@ -239,8 +237,15 @@
     if (live) live.textContent = name + ' added to your order.';
   }
 
+  // Dishes with nothing to choose go straight in; the rest open the pop-up.
   $$('[data-add]').forEach(function (b) {
-    b.addEventListener('click', function () { openItem(b.getAttribute('data-add')); });
+    b.addEventListener('click', function () {
+      var key = b.getAttribute('data-add'), it = ITEMS[key];
+      if (it.variants.length > 1 || it.choices.length || Object.keys(it.addons).length) { openItem(key); return; }
+      add({ key: key, variant: 0, choice: '', addons: [], note: '', qty: 1 });
+      flash(it.name);
+      b.classList.remove('is-added'); void b.offsetWidth; b.classList.add('is-added');
+    });
   });
 
   // Highlight the section in view in the category bar

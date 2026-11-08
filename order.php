@@ -126,7 +126,7 @@ $errAttr    = fn($f) => isset($orderErrors[$f]) ? ' aria-invalid="true" aria-des
             </section>
         <?php endforeach; ?>
 
-        <p class="order-small">Allergen numbers: 1 gluten (W wheat, B barley), 2 milk, 3 eggs, 4 fish, 5 crustaceans, 6 molluscs, 7 peanuts, 8 nuts, 9 sesame, 10 sulphites, 11 soya, 12 celery, 13 mustard, 14 lupin. Please tell us about any allergy in the order notes or ring us before ordering.</p>
+        <p class="order-small">Allergen numbers: 1 gluten (W wheat, B barley), 2 milk, 3 eggs, 4 fish, 5 crustaceans, 6 molluscs, 7 peanuts, 8 nuts, 9 sesame, 10 sulphites, 11 soya, 12 celery, 13 mustard, 14 lupin. Please tell us about any allergy in the notes at checkout, or ring us before ordering.</p>
     </div>
 
     <aside class="order-basket" id="basket" aria-label="Your order">
@@ -179,8 +179,8 @@ $errAttr    = fn($f) => isset($orderErrors[$f]) ? ' aria-invalid="true" aria-des
                         <?= $fieldError('email') ?>
                     </div>
                     <div class="field">
-                        <label for="notes">Order notes <span class="optional">(optional)</span></label>
-                        <textarea id="notes" name="notes" rows="2" maxlength="300" placeholder="Allergies, no chopsticks needed…"<?= $errAttr('notes') ?>><?= e($orderOld['notes']) ?></textarea>
+                        <label for="notes">Notes for the kitchen <span class="optional">(optional)</span></label>
+                        <textarea id="notes" name="notes" rows="3" maxlength="300" placeholder="Allergies, extra spicy, no chopsticks needed…"<?= $errAttr('notes') ?>><?= e($orderOld['notes']) ?></textarea>
                         <?= $fieldError('notes') ?>
                     </div>
                     <label class="consent-label ob-consent">
@@ -213,10 +213,6 @@ $errAttr    = fn($f) => isset($orderErrors[$f]) ? ' aria-invalid="true" aria-des
         <div class="od-group" data-od-variants></div>
         <div class="od-group" data-od-choices></div>
         <div class="od-group" data-od-addons></div>
-        <div class="field">
-            <label for="od-note">Note for the kitchen <span class="optional">(optional)</span></label>
-            <input type="text" id="od-note" maxlength="140" placeholder="e.g. extra spicy" data-od-note>
-        </div>
         <p class="od-error" data-od-error hidden></p>
         <div class="od-foot">
             <div class="qty" role="group" aria-label="Quantity">

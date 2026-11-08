@@ -1,0 +1,71 @@
+/* Booking widget (booking.php), laid out like the OpenTable booking box. */
+
+.ot-title { font-family: var(--serif); font-size: 2rem; text-align: center; color: var(--forest-2); margin: 0 0 22px; }
+.ot-pickers { display: grid; grid-template-columns: 1.15fr 1fr; gap: 12px; }
+.ot-pick { position: relative; display: flex; align-items: center; background: #f1f1ee; border-radius: 8px; transition: box-shadow .2s, background .2s; }
+.ot-pick-wide { grid-column: 1 / -1; }
+.ot-pick:hover { background: #ebeae5; }
+.ot-pick:focus-within { box-shadow: 0 0 0 2px var(--forest-2); background: #fff; }
+.ot-pick svg { position: absolute; left: 16px; width: 22px; height: 22px; fill: none; stroke: var(--forest-2); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.ot-pick select {
+    appearance: none; width: 100%; border: 0; background: transparent; font: inherit; font-size: 1.05rem; color: var(--text);
+    padding: 17px 40px 17px 50px; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23173128' stroke-width='1.8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; background-size: 12px;
+}
+.ot-pick select:focus { outline: none; }
+.ot-pick select[aria-invalid="true"] { box-shadow: inset 0 0 0 2px #b3261e; border-radius: 8px; }
+.ot-find { margin-top: 12px; }
+
+.ot-times { margin-top: 26px; transition: opacity .2s; }
+.ot.is-loading .ot-times { opacity: .45; pointer-events: none; }
+.ot-label { font-weight: 500; font-size: 1.05rem; color: var(--text); margin: 0 0 12px; }
+.ot-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.ot-all { margin-top: 10px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.ot-chip { position: relative; cursor: pointer; }
+.ot-chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.ot-chip span {
+    display: flex; align-items: center; justify-content: center; height: 46px; border-radius: 6px;
+    background: var(--forest-2); color: var(--cream); font-weight: 500; font-size: 1rem; letter-spacing: .02em;
+    transition: background .2s, transform .15s, box-shadow .2s;
+}
+.ot-chip:hover span { background: var(--green); }
+.ot-chip input:focus-visible + span { box-shadow: 0 0 0 3px var(--gold); }
+.ot-chip input:checked + span { background: var(--gold); color: var(--ink); box-shadow: 0 0 0 2px var(--forest-2) inset; }
+.ot-chip.is-full span { background: #ecebe6; color: #a3a8a4; text-decoration: line-through; cursor: not-allowed; }
+.ot-chip.is-full input { cursor: not-allowed; }
+.ot-none { font-size: .95rem; color: #8c1d18; background: #fbeceb; padding: 12px 14px; border-radius: 6px; margin: 0; }
+
+.ot-facts { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; }
+.ot-facts li { display: flex; align-items: center; gap: 12px; font-size: .98rem; color: var(--text); }
+.ot-facts svg { width: 24px; height: 24px; fill: none; stroke: var(--forest-2); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.ot-more {
+    display: block; width: 100%; margin-top: 20px; padding: 15px; font: inherit; font-size: 1rem; color: var(--text);
+    background: #fff; border: 1px solid rgba(28, 40, 35, .2); border-radius: 6px; cursor: pointer; transition: border-color .2s;
+}
+.ot-more:hover { border-color: var(--forest-2); }
+
+/* Step 2: details. Hidden until a time is picked, but only when the script runs. */
+.ot-details { margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--line); }
+.ot.is-enhanced .ot-details { display: none; }
+.ot.is-enhanced .ot-details.is-open { display: block; animation: ot-in .35s ease; }
+@keyframes ot-in { from { opacity: 0; transform: translateY(8px); } }
+.ot-summary { display: none; }
+.ot.is-enhanced .ot-summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--cream); padding: 14px 16px; border-radius: 8px; margin-bottom: 22px; font-size: .98rem; }
+.ot-summary strong { font-weight: 500; color: var(--forest-2); }
+.ot-change { background: none; border: 0; font: inherit; font-size: .9rem; color: var(--copper); text-decoration: underline; cursor: pointer; padding: 0; }
+.ot-seats { display: flex; gap: 10px; flex-wrap: wrap; }
+.ot-seat { position: relative; cursor: pointer; }
+.ot-seat input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+.ot-seat span { display: inline-block; padding: 10px 18px; border: 1px solid rgba(28, 40, 35, .2); border-radius: 999px; font-size: .95rem; transition: all .2s; }
+.ot-seat input:checked + span { background: var(--forest-2); border-color: var(--forest-2); color: var(--cream); }
+.ot-seat input:focus-visible + span { box-shadow: 0 0 0 3px var(--gold); }
+.ot-hint { margin: 8px 0 20px !important; }
+
+@media (max-width: 560px) {
+    .ot-pickers { grid-template-columns: 1.2fr 1fr; gap: 10px; }
+    .ot-pick select { font-size: 1rem; padding: 16px 30px 16px 44px; background-position: right 12px center; }
+    .ot-pick svg { left: 13px; width: 20px; height: 20px; }
+    .ot-chips { grid-template-columns: repeat(3, 1fr); }
+    .ot-title { font-size: 1.7rem; }
+}
