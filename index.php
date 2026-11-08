@@ -3,7 +3,7 @@ require_once __DIR__ . '/includes/config.php';
 $pageTitle       = 'October Chinese Dining | Chinese Restaurant in Dún Laoghaire';
 $pageDescription = 'October is a Chinese restaurant on George’s Street Upper, Dún Laoghaire. Sichuan, Hunan and Cantonese dishes for sharing, handmade dumplings, and lunch from 12:30. Rated 5.0 on Google.' . (booking_online() ? ' Book a table online.' : '');
 $pageKeywords    = 'Chinese restaurant Dún Laoghaire, Chinese restaurant Dun Laoghaire, Sichuan food Dublin, dumplings Dún Laoghaire, Chinese lunch Dún Laoghaire, George’s Street restaurant';
-$activePage      = isset($_GET['hero']) && in_array($_GET['hero'], ['a', 'b', 'c'], true) ? 'home-' . $_GET['hero'] : 'home';
+$activePage      = isset($_GET['hero']) && in_array($_GET['hero'], ['a', 'b', 'c', 'd'], true) ? 'home-' . $_GET['hero'] : 'home';
 $heroHeader      = true;
 
 require_once __DIR__ . '/includes/config.php';
@@ -69,9 +69,9 @@ foreach ($signatures as &$sig) {
 unset($sig);
 
 /*
- * Alternative first images for the restaurant to compare (?hero=a, b or c,
+ * Alternative first images for the restaurant to compare (?hero=a, b, c or d,
  * linked from the top menu). Text sits on the dark side of the photo, never
- * over the food. Remove these, and the Home A/B/C menu links in
+ * over the food. Remove these, and the Home A–D menu links in
  * includes/header.php, once one has been picked.
  */
 $heroOptions = [
@@ -81,6 +81,8 @@ $heroOptions = [
             'alt' => 'Stir-fried beef fillet with wild chilli pepper, steam rising from the bowl'],
     'c' => ['img' => 'images/oct/beef-fillet-top.jpg', 'pos' => '85% 50%',
             'alt' => 'Stir-fried beef fillet with wild chilli pepper, from above'],
+    'd' => ['img' => 'images/oct/kataifi-prawns.jpg', 'pos' => '40% 55%',
+            'alt' => 'Kataifi-wrapped king prawns with mango lime sauce'],
 ];
 $heroKey = isset($_GET['hero'], $heroOptions[$_GET['hero']]) ? $_GET['hero'] : null;
 $hero    = $heroKey ? $heroOptions[$heroKey] : null;

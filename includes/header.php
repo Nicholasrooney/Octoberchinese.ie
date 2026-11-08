@@ -20,11 +20,12 @@ $nav = [
     // The second design (Hunan style) for the restaurant to compare. Remove
     // this line once they have picked a design.
     'october'  => ['October', 'october/'],
-    // Three alternative first images for the home page, to compare. Remove
+    // Four alternative first images for the home page, to compare. Remove
     // these three lines once one has been picked.
     'home-a'   => ['Home A', 'index.php?hero=a'],
     'home-b'   => ['Home B', 'index.php?hero=b'],
     'home-c'   => ['Home C', 'index.php?hero=c'],
+    'home-d'   => ['Home D', 'index.php?hero=d'],
     'booking'  => ['Book a table', 'booking.php'],
 ];
 

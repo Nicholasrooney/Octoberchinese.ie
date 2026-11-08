@@ -777,6 +777,7 @@ p { margin: 0 0 1em; }
 .hero-split .hero-lede { max-width: 26ch; }
 .hero-split-a .hero-media { width: 58%; }
 .hero-split-c .hero-media { width: 56%; }
+.hero-split-d .hero-media { width: 60%; }
 
 @media (max-width: 900px) {
     .hero-split { flex-direction: column; align-items: stretch; justify-content: flex-end; }
@@ -787,5 +788,5 @@ p { margin: 0 0 1em; }
     }
     .hero-split .hero-media::after { display: block; inset: 0 0 auto 0; height: 110px; background: linear-gradient(180deg, rgba(5, 8, 7, .75), transparent); }
     .hero-split .hero-inner { padding-top: 0; margin-top: -40px; position: relative; z-index: 1; }
-    .hero-split-a .hero-media { width: 100%; }
+    .hero-split-a .hero-media, .hero-split-d .hero-media { width: 100%; }
 }
