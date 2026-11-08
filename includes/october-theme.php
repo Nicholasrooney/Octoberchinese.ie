@@ -61,10 +61,7 @@ function oct_header(string $title, string $description, string $active = ''): vo
     <meta name="theme-color" content="#16302f">
     <link rel="icon" type="image/svg+xml" href="<?= OCT_ROOT ?>images/favicon.svg">
     <?php render_analytics_head(); ?>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://api.fontshare.com/v2/css?f[]=erode@400,500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= e(asset('fonts/fonts.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('october/october.css')) ?>">
 </head>
 <body class="oc oc-page-<?= e($active) ?>">

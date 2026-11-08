@@ -65,9 +65,8 @@ require_once __DIR__ . '/brand.php';
     <meta name="theme-color" content="#0f1f19">
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
     <?php render_analytics_head(); ?>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+    <?php /* Fonts are served from this site, not Google, so nothing is sent to a third party before consent. */ ?>
+    <link rel="stylesheet" href="<?= e(asset('fonts/fonts.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
     <?php foreach ($pageStyles ?? [] as $css): ?>
     <link rel="stylesheet" href="<?= e(asset($css)) ?>">

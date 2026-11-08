@@ -13,12 +13,15 @@ DirectoryIndex index.php index.html
 Options -Indexes
 
 <IfModule mod_headers.c>
-    # Basic hardening. No CSP here: the site loads Google Fonts and, once the
-    # visitor allows it, a Google Maps iframe, and a policy tight enough to be
-    # worth having would break both.
+    # Basic hardening. No CSP here yet: once the visitor allows it the site
+    # loads Google Analytics and a Google Maps iframe. Fonts are self-hosted.
     Header always set X-Content-Type-Options "nosniff"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType font/woff2 .woff2
 </IfModule>
 
 # Let the browser cache the assets that carry a long life anyway.
@@ -29,6 +32,7 @@ Options -Indexes
     ExpiresByType image/webp "access plus 6 months"
     ExpiresByType text/css   "access plus 1 week"
     ExpiresByType text/javascript "access plus 1 week"
+    ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
 <IfModule mod_deflate.c>

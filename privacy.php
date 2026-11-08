@@ -9,7 +9,7 @@ $pageSchema = [seo_breadcrumbs(['Privacy notice' => 'privacy.php'])];
 require __DIR__ . '/includes/header.php';
 
 $contact = $site['email'] ?: ($site['phone'] ?: 'us in the restaurant');
-$updated = 'September 2026';
+$updated = 'November 2026';
 ?>
 
 <section class="page-intro">
@@ -31,15 +31,26 @@ $updated = 'September 2026';
     </p>
 
     <h2>When you book a table</h2>
-    <p>We ask for your name, phone number and email address, plus the date, time,
-       number of guests, any seating preference and anything you tell us in the
-       notes box.</p>
+    <p>Whether you book <?= booking_online() ? 'online or ' : '' ?>by phone, we take your name, phone number and
+       (if you give it) email address, plus the date, time, number of guests, any
+       seating preference and anything you tell us about the booking.</p>
     <p>We use it to hold your table, to contact you if something changes, and to
        keep a record of the booking. Our lawful basis is that we need it to
        provide the booking you asked for.</p>
     <p>Staff can add their own notes to your record — for example an allergy you
        mentioned, or that you prefer the booth. You can ask to see these.</p>
 
+    <?php if (ordering_online()): ?>
+    <h2>When you order for collection</h2>
+    <p>We ask for your name, phone number and email address, the dishes you order,
+       your collection time and any notes for the kitchen. We use it to make your
+       order, to send you a receipt, to tell you when it is ready, and to contact
+       you if something changes. Our lawful basis is that we need it to provide
+       the order you asked for. Order records are kept for
+       <?= (int) ($booking['retention_months'] ?? 24) ?> months.</p>
+    <?php endif; ?>
+
+    <?php if (!empty($catering['enabled'])): ?>
     <h2>When you ask about catering</h2>
     <p>If you use our catering page, we keep what you send us: your phone number
        or email, where the event is, and — if you use the full form — your name,
@@ -48,6 +59,8 @@ $updated = 'September 2026';
     <p>We use it only to answer your enquiry and, if you go ahead, to arrange the
        catering. Enquiries that go quiet are deleted <?= (int) ($booking['retention_months'] ?? 24) ?> months
        after they were last updated.</p>
+
+    <?php endif; ?>
 
     <h2>Marketing emails</h2>
     <p>We only email you about offers and events if you ticked the box asking us
@@ -73,23 +86,36 @@ $updated = 'September 2026';
        name, party size and contact details are also written to a private calendar
        owned by the restaurant so staff can see the day's bookings.</p>
 
-    <h2>Cookies</h2>
-    <p>This site sets one cookie of its own, which keeps your booking form secure
-       while you fill it in. It is deleted when you close your browser and it does
-       not track you.</p>
-    <p><strong>Google Analytics.</strong> If you choose "Accept all" in the cookie
-       notice, we use Google Analytics to understand how people use this site —
-       which pages are visited, and whether people tap things like the menu,
-       directions or the booking form. It sets cookies whose names start with
-       <code>_ga</code>. We do not send Google your name, phone number, email or
-       anything you type into a form, and we do not use it for advertising.
-       Nothing is sent to Google unless you accept.</p>
-    <p><strong>Google Maps.</strong> Our home page shows a map loaded from Google,
-       and Google may set their own cookies when it loads. If you choose
-       "Essential only" we hide the map and show a plain link instead.</p>
-    <p>You can change your mind at any time using <strong>Cookie settings</strong>
-       at the bottom of every page. Choosing "Essential only" stops analytics and
-       deletes its cookies.</p>
+    <h2>Cookies and other technology</h2>
+    <?php if (booking_online() || ordering_online()): ?>
+    <p>This site sets one cookie of its own, which keeps the <?= booking_online() && ordering_online() ? 'booking and order forms' : (booking_online() ? 'booking form' : 'order form') ?>
+       secure while you fill them in. It is deleted when you close your browser and
+       it does not track you. It is strictly necessary, so it does not need your consent.</p>
+    <?php else: ?>
+    <p>This site sets no cookies of its own.</p>
+    <?php endif; ?>
+    <p>Everything else is <strong>off until you choose</strong>. When you first visit,
+       a notice asks whether you accept optional cookies. “Reject” and “Accept” are
+       equal choices, and nothing below loads until you press “Accept”.</p>
+    <p><strong>Google Analytics.</strong> If you accept, we use Google Analytics to
+       understand how people use this site: which pages are visited, and whether
+       people tap things like the menu, directions or the phone number. It sets
+       cookies whose names start with <code>_ga</code>, which last up to two years
+       unless you withdraw consent. We do not send Google your name, phone number,
+       email or anything you type into a form, and we do not use it for advertising.
+       Google Analytics keeps this data for no more than 14 months. Google may
+       process it outside the EU; Google LLC is certified under the EU-US Data
+       Privacy Framework.</p>
+    <p><strong>Google Maps.</strong> Our home page can show a map from Google. It
+       only loads if you accept, or if you tap “Show the map”. Google may set its
+       own cookies when it loads. Otherwise you see a link that opens Google Maps
+       in a new tab.</p>
+    <p><strong>Fonts.</strong> The fonts on this site are stored on our own server,
+       so viewing a page does not send your details to Google or anyone else.</p>
+    <p><strong>Your choice.</strong> We remember your choice in your own browser
+       (not in a cookie) for six months, then ask again. You can change your mind at
+       any time using <strong>Cookie settings</strong> at the bottom of every page.
+       Choosing “Reject” stops analytics, deletes its cookies and hides the map.</p>
 
     <h2>Your rights</h2>
     <p>Under GDPR you can ask us to:</p>

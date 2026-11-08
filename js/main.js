@@ -80,10 +80,18 @@
 
 // Cookie choice. Stored in localStorage rather than a cookie, so saying no to
 // cookies doesn't ironically set one. Returns 'all', 'essential' or null.
+// The choice is stored with the date it was made. The Data Protection
+// Commission's guidance is to ask again no later than six months on, so an
+// older choice (or one saved before dates were recorded) counts as no choice.
+var COOKIE_MAX_AGE = 182 * 24 * 60 * 60 * 1000;
 function cookieChoice(set) {
   try {
-    if (set) { localStorage.setItem('october-cookies', set); return set; }
-    return localStorage.getItem('october-cookies');
+    if (set) { localStorage.setItem('october-cookies', set + '|' + Date.now()); return set; }
+    var raw = localStorage.getItem('october-cookies') || '';
+    var parts = raw.split('|');
+    var at = parseInt(parts[1], 10);
+    if (!parts[0] || !at || Date.now() - at > COOKIE_MAX_AGE) return null;
+    return parts[0];
   } catch (e) {
     // Private browsing, or storage blocked. Treat as "not decided" and never
     // assume consent.
@@ -91,11 +99,9 @@ function cookieChoice(set) {
   }
 }
 
-// Map. It loads with the page now rather than waiting for a tap, so people see
-// where we are without doing anything. Google may set cookies when it loads, so
-// anyone who has actively chosen "Essential only" gets it taken back out and
-// replaced with a link — that keeps the cookie choice meaningful rather than
-// decorative.
+// Map. Google may set cookies when it loads, so it is only loaded once the
+// visitor has accepted cookies, or taps "Show the map" (which loads it for that
+// visit only). Until then the page makes no request to Google at all.
 (function () {
   var frame = document.querySelector('.map-frame');
   if (!frame) return;
@@ -112,7 +118,7 @@ function cookieChoice(set) {
     link.rel = 'noopener';
     link.innerHTML =
       '<span class="map-declined-title">Map hidden</span>' +
-      '<span class="map-declined-note">You chose essential cookies only. ' +
+      '<span class="map-declined-note">You turned off optional cookies. ' +
       'Tap to open the map in Google Maps instead.</span>';
     frame.appendChild(link);
   }
@@ -120,6 +126,7 @@ function cookieChoice(set) {
   function restoreMap() {
     if (frame.querySelector('.map-embed')) return;
     var declined = frame.querySelector('.map-declined');
+    if (declined && declined.hasAttribute('data-map-load')) declined.remove();
     if (declined) declined.remove();
 
     var iframe = document.createElement('iframe');
@@ -132,7 +139,9 @@ function cookieChoice(set) {
     frame.appendChild(iframe);
   }
 
-  if (cookieChoice() === 'essential') removeMap();
+  if (cookieChoice() === 'all') restoreMap();
+  var tap = frame.querySelector('[data-map-load]');
+  if (tap) tap.addEventListener('click', restoreMap);
 
   document.addEventListener('october:allow-map', restoreMap);
   document.addEventListener('october:deny-map', removeMap);

@@ -37,7 +37,12 @@ function render_analytics_head(): void
       window.gtag = gtag;
 
       function choice() {
-        try { return localStorage.getItem('october-cookies'); } catch (e) { return null; }
+        // Same rule as js/main.js: a choice older than six months doesn't count.
+        try {
+          var parts = (localStorage.getItem('october-cookies') || '').split('|');
+          var at = parseInt(parts[1], 10);
+          return at && Date.now() - at <= 182 * 864e5 ? parts[0] : null;
+        } catch (e) { return null; }
       }
 
       function load() {

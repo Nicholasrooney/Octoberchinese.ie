@@ -94,12 +94,11 @@ function render_map_section(array $site): void
             <div class="map-frame" data-embed="<?= e($links['embed']) ?>"
                  data-place="<?= e($links['place']) ?>"
                  data-maps="<?= e($links['google']) ?>">
-                <iframe class="map-embed"
-                        src="<?= e($links['embed']) ?>"
-                        title="Map showing <?= e($links['place']) ?>"
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        allowfullscreen></iframe>
+                <?php /* No iframe until the visitor agrees: Google sees nothing before that. */ ?>
+                <button type="button" class="map-declined" data-map-load>
+                    <span class="map-declined-title">Show the map</span>
+                    <span class="map-declined-note">The map comes from Google, who may set cookies when it loads. Tap to show it, or use “Open in Maps” above.</span>
+                </button>
             </div>
         </div>
     </section>

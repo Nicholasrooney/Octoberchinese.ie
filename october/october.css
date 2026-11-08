@@ -18,7 +18,7 @@
     --ink-soft: #3c4f50;
     --line-light: rgba(254, 235, 222, .45);
     --line-dark: rgba(36, 70, 72, .45);
-    --serif: "Erode", "Cormorant Garamond", "Times New Roman", Georgia, serif;
+    --serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
     --sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --cn: "Noto Serif SC", "Songti SC", serif;
     --wrap: 1180px;
