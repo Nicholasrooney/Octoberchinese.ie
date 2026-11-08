@@ -3,7 +3,7 @@ require_once __DIR__ . '/includes/config.php';
 $pageTitle       = 'October Chinese Dining | Chinese Restaurant in Dún Laoghaire';
 $pageDescription = 'October is a Chinese restaurant on George’s Street Upper, Dún Laoghaire. Sichuan, Hunan and Cantonese dishes for sharing, handmade dumplings, and lunch from 12:30. Rated 5.0 on Google.' . (booking_online() ? ' Book a table online.' : '');
 $pageKeywords    = 'Chinese restaurant Dún Laoghaire, Chinese restaurant Dun Laoghaire, Sichuan food Dublin, dumplings Dún Laoghaire, Chinese lunch Dún Laoghaire, George’s Street restaurant';
-$activePage      = 'home';
+$activePage      = isset($_GET['hero']) && in_array($_GET['hero'], ['a', 'b', 'c'], true) ? 'home-' . $_GET['hero'] : 'home';
 $heroHeader      = true;
 
 require_once __DIR__ . '/includes/config.php';
@@ -68,13 +68,35 @@ foreach ($signatures as &$sig) {
 }
 unset($sig);
 
+/*
+ * Alternative first images for the restaurant to compare (?hero=a, b or c,
+ * linked from the top menu). Text sits on the dark side of the photo, never
+ * over the food. Remove these, and the Home A/B/C menu links in
+ * includes/header.php, once one has been picked.
+ */
+$heroOptions = [
+    'a' => ['img' => 'images/oct/kataifi-prawns-top.jpg', 'pos' => '30% 50%',
+            'alt' => 'Kataifi-wrapped king prawns with mango lime sauce, from above'],
+    'b' => ['img' => 'images/oct/beef-fillet-steam.jpg', 'pos' => '52% 60%',
+            'alt' => 'Stir-fried beef fillet with wild chilli pepper, steam rising from the bowl'],
+    'c' => ['img' => 'images/oct/beef-fillet-top.jpg', 'pos' => '85% 50%',
+            'alt' => 'Stir-fried beef fillet with wild chilli pepper, from above'],
+];
+$heroKey = isset($_GET['hero'], $heroOptions[$_GET['hero']]) ? $_GET['hero'] : null;
+$hero    = $heroKey ? $heroOptions[$heroKey] : null;
+
 $lunchFrom = min(array_map(fn($i) => (float) $i['price'], array_merge(...array_column($lunchMenu, 'items'))));
 ?>
 
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero<?= $hero ? ' hero-split hero-split-' . e($heroKey) : '' ?>" aria-labelledby="hero-title">
     <div class="hero-media">
-        <img src="images/kataifi-prawns-pour.jpg" alt="Mango lime sauce poured from a brass pot over kataifi-wrapped king prawns"
-             width="1800" height="1200" fetchpriority="high">
+        <?php if ($hero): ?>
+            <img src="<?= e($hero['img']) ?>" alt="<?= e($hero['alt']) ?>" style="object-position: <?= e($hero['pos']) ?>"
+                 width="1800" height="1200" fetchpriority="high">
+        <?php else: ?>
+            <img src="images/kataifi-prawns-pour.jpg" alt="Mango lime sauce poured from a brass pot over kataifi-wrapped king prawns"
+                 width="1800" height="1200" fetchpriority="high">
+        <?php endif; ?>
     </div>
     <?php render_arches('arches hero-arches'); ?>
     <div class="hero-inner">
