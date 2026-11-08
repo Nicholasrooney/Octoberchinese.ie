@@ -7,6 +7,8 @@
 
 require_once __DIR__ . '/orders.php';
 
+redirect_home_unless(ordering_online());
+
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params(['httponly' => true, 'secure' => !empty($_SERVER['HTTPS']), 'samesite' => 'Lax']);
     session_start();

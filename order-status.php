@@ -7,6 +7,8 @@
  */
 require_once __DIR__ . '/includes/orders.php';
 
+redirect_home_unless(ordering_online());
+
 $order = null;
 try {
     $order = order_by_token((string) ($_GET['t'] ?? ''));

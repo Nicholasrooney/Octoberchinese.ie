@@ -17,6 +17,10 @@ $pages = [
     'gallery.php' => ['monthly', '0.7'],
 ];
 
+if (!booking_online()) {
+    unset($pages['booking.php']);
+}
+
 // Only list catering while it is switched on.
 if (!empty($catering['enabled'])) {
     $pages['event-catering.php'] = ['monthly', '0.9'];

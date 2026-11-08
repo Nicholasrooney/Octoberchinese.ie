@@ -59,7 +59,7 @@ function seo_restaurant_node(): array
         'description'  => 'Chinese restaurant in Dún Laoghaire, Co. Dublin. Sichuan, Hunan and '
                         . 'Cantonese dishes for sharing, handmade dumplings, and a weekday lunch menu.',
         'hasMenu'      => seo_url('menu.php'),
-        'acceptsReservations' => seo_url('booking.php'),
+        'acceptsReservations' => booking_online() ? seo_url('booking.php') : 'True',
     ];
 
     if (!empty($site['address'])) {

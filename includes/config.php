@@ -96,6 +96,14 @@ $booking = [
 
     // Filled in below from service_hours. Do not edit by hand.
     'times' => [],
+    /*
+     * Online table booking on the website. false hides every "Book a table"
+     * button and link, sends booking.php back to the home page, and asks
+     * people to ring instead. Staff can still add phone bookings in the diary.
+     * Set to true to bring the booking page back.
+     */
+    'online'            => false,
+
     'max_guests'        => 8,   // bigger groups are asked to ring
     'days_ahead'        => 60,  // how far in advance people can book
 
@@ -242,9 +250,9 @@ $calendar = [
  * payment (e.g. SumUp) can be added later without changing the order flow.
  */
 $ordering = [
-    // false takes order.php offline: the page says ordering is closed and
-    // points people to the phone instead.
-    'enabled' => true,
+    // false takes ordering off the site: the Order link disappears and
+    // order.php sends people back to the home page. Set to true to bring it back.
+    'enabled' => false,
 
     // Minutes the kitchen needs. The earliest collection time is now + this.
     'prep_minutes' => 25,
@@ -443,6 +451,43 @@ function booking_seating_label(?string $seating): string
 /**
  * Whether prices are shown anywhere on the site. See $site['show_prices'].
  */
+/** Is online table booking switched on? See $booking['online']. */
+function booking_online(): bool
+{
+    return !empty($GLOBALS['booking']['online']);
+}
+
+/** Is click and collect switched on? See $ordering['enabled']. */
+function ordering_online(): bool
+{
+    return !empty($GLOBALS['ordering']['enabled']);
+}
+
+/** Where a "book" button goes: the booking page, or the phone when booking is off. */
+function book_href(string $root = ''): string
+{
+    global $site;
+    if (booking_online()) {
+        return $root . 'booking.php';
+    }
+    return $site['phone'] ? 'tel:+353' . ltrim(preg_replace('/[^0-9]/', '', $site['phone']), '0') : $root . 'index.php#visit';
+}
+
+/** What a "book" button says. */
+function book_label(): string
+{
+    return booking_online() ? 'Book a table' : 'Call to book';
+}
+
+/** Sends a switched-off page back to the home page. */
+function redirect_home_unless(bool $on, string $root = ''): void
+{
+    if (!$on) {
+        header('Location: ' . $root . 'index.php', true, 302);
+        exit;
+    }
+}
+
 function show_prices(): bool
 {
     global $site;

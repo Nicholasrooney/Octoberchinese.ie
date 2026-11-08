@@ -35,7 +35,7 @@
             <?php if (!empty($site['instagram'])): ?>
                 <p><a class="footer-link" href="<?= e($site['instagram']) ?>" target="_blank" rel="noopener">Instagram</a></p>
             <?php endif; ?>
-            <p><a class="footer-link" href="booking.php">Book a table</a></p>
+            <?php if (booking_online()): ?><p><a class="footer-link" href="booking.php">Book a table</a></p><?php endif; ?>
         </div>
 
         <?php if (!empty($site['hours'])): ?>
@@ -59,10 +59,14 @@
 
 <?php if (!in_array($activePage ?? '', ['booking', 'order'], true)): ?>
 <div class="mobile-cta" data-mobile-cta>
-    <?php if ($site['phone']): ?>
-        <a class="mobile-cta-call" href="tel:+353<?= e(ltrim(preg_replace('/[^0-9]/', '', $site['phone']), '0')) ?>"><?= icon('phone') ?> Call</a>
+    <?php if (booking_online()): ?>
+        <?php if ($site['phone']): ?>
+            <a class="mobile-cta-call" href="tel:+353<?= e(ltrim(preg_replace('/[^0-9]/', '', $site['phone']), '0')) ?>"><?= icon('phone') ?> Call</a>
+        <?php endif; ?>
+        <a class="mobile-cta-book" href="booking.php">Book a table</a>
+    <?php elseif ($site['phone']): ?>
+        <a class="mobile-cta-book" href="tel:+353<?= e(ltrim(preg_replace('/[^0-9]/', '', $site['phone']), '0')) ?>"><?= icon('phone') ?> Call to book</a>
     <?php endif; ?>
-    <a class="mobile-cta-book" href="booking.php">Book a table</a>
 </div>
 <?php endif; ?>
 

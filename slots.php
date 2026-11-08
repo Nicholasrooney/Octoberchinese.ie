@@ -13,6 +13,11 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/bookings.php';
 require_once __DIR__ . '/includes/capacity.php';
 
+if (!booking_online()) {
+    http_response_code(404);
+    exit;
+}
+
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 

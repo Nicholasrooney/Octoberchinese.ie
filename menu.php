@@ -172,8 +172,12 @@ function render_menu_sections(array $sections, array $allergenKey, array $photos
         <p class="eyebrow">Hungry already?</p>
         <h2>Save a seat at the table</h2>
         <div class="cta-actions">
-            <a class="btn btn-gold" href="booking.php">Book a table</a>
-            <?php if ($telHref): ?><a class="btn btn-ghost" href="<?= e($telHref) ?>">Call <?= e($site['phone']) ?></a><?php endif; ?>
+            <?php if (booking_online()): ?>
+                <a class="btn btn-gold" href="booking.php">Book a table</a>
+                <?php if ($telHref): ?><a class="btn btn-ghost" href="<?= e($telHref) ?>">Call <?= e($site['phone']) ?></a><?php endif; ?>
+            <?php elseif ($telHref): ?>
+                <a class="btn btn-gold" href="<?= e($telHref) ?>">Call <?= e($site['phone']) ?> to book</a>
+            <?php endif; ?>
         </div>
     </div>
 </section>

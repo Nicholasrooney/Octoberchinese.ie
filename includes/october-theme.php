@@ -41,6 +41,12 @@ function oct_header(string $title, string $description, string $active = ''): vo
         'booking' => ['Bookings', OCT_ROOT . 'booking.php'],
         'contact' => ['Contact', 'index.php#contact'],
     ];
+    if (!booking_online()) {
+        unset($nav['booking']);
+    }
+    if (!ordering_online()) {
+        unset($nav['order']);
+    }
     ?>
 <!DOCTYPE html>
 <html lang="en-IE">
@@ -117,9 +123,9 @@ function oct_footer(): void
         <div class="oc-reveal">
             <?= oct_eyebrow('预订餐桌', 'Make a reservation') ?>
             <h2>Reserve your table and stay a while.</h2>
-            <p>Book online in a minute for up to 8 guests, or ring us for a bigger group. We will have the table ready under the copper arches.</p>
+            <p><?= booking_online() ? 'Book online in a minute for up to 8 guests, or ring us for a bigger group.' : 'Ring us to book, whether it is a table for two or a long table for the whole family.' ?> We will have the table ready under the copper arches.</p>
             <div class="oc-btn-row">
-                <a class="oc-btn oc-btn-light" href="<?= OCT_ROOT ?>booking.php">Book a table</a>
+                <a class="oc-btn oc-btn-light" href="<?= e(book_href(OCT_ROOT)) ?>"><?= e(book_label()) ?></a>
             </div>
             <figure class="oc-contact-photo">
                 <img src="<?= OCT_ROOT ?>images/storefront.jpg" alt="The green October shopfront on George’s Street Upper" loading="lazy">
@@ -149,7 +155,7 @@ function oct_footer(): void
                     <div><dt><?= e($days) ?></dt><dd><?= e($time) ?></dd></div>
                 <?php endforeach; ?>
             </dl>
-            <p><a class="oc-footer-link" href="<?= OCT_ROOT ?>booking.php">Book a table with us</a></p>
+            <p><a class="oc-footer-link" href="<?= e(book_href(OCT_ROOT)) ?>"><?= booking_online() ? 'Book a table with us' : 'Call to book a table' ?></a></p>
         </div>
     </div>
     <div class="oc-wrap oc-footer-legal">
@@ -160,8 +166,12 @@ function oct_footer(): void
 </footer>
 
 <div class="oc-mobile-cta">
-    <?php if ($tel): ?><a href="<?= e($tel) ?>">Call</a><?php endif; ?>
-    <a class="is-book" href="<?= OCT_ROOT ?>booking.php">Book a table</a>
+    <?php if (booking_online()): ?>
+        <?php if ($tel): ?><a href="<?= e($tel) ?>">Call</a><?php endif; ?>
+        <a class="is-book" href="<?= OCT_ROOT ?>booking.php">Book a table</a>
+    <?php elseif ($tel): ?>
+        <a class="is-book" href="<?= e($tel) ?>">Call to book</a>
+    <?php endif; ?>
 </div>
 
 <?php

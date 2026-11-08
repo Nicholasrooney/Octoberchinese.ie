@@ -15,6 +15,8 @@ require_once __DIR__ . '/capacity.php';
 require_once __DIR__ . '/mailer.php';
 require_once __DIR__ . '/calendar-sync.php';
 
+redirect_home_unless(booking_online());
+
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'httponly' => true,

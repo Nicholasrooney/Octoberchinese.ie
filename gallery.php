@@ -76,7 +76,7 @@ $photos = [
     <div class="container cta-inner">
         <p class="eyebrow">Looks good?</p>
         <h2>It tastes even better</h2>
-        <div class="cta-actions"><a class="btn btn-gold" href="booking.php">Book a table</a></div>
+        <div class="cta-actions"><a class="btn btn-gold" href="<?= e(book_href()) ?>"><?= e(book_label()) ?></a></div>
     </div>
 </section>
 

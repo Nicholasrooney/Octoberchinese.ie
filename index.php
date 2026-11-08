@@ -1,6 +1,7 @@
 <?php
+require_once __DIR__ . '/includes/config.php';
 $pageTitle       = 'October Chinese Dining | Chinese Restaurant in Dún Laoghaire';
-$pageDescription = 'October is a Chinese restaurant on George’s Street Upper, Dún Laoghaire. Sichuan, Hunan and Cantonese dishes for sharing, handmade dumplings, and lunch from 12:30. Rated 5.0 on Google. Book a table online.';
+$pageDescription = 'October is a Chinese restaurant on George’s Street Upper, Dún Laoghaire. Sichuan, Hunan and Cantonese dishes for sharing, handmade dumplings, and lunch from 12:30. Rated 5.0 on Google.' . (booking_online() ? ' Book a table online.' : '');
 $pageKeywords    = 'Chinese restaurant Dún Laoghaire, Chinese restaurant Dun Laoghaire, Sichuan food Dublin, dumplings Dún Laoghaire, Chinese lunch Dún Laoghaire, George’s Street restaurant';
 $activePage      = 'home';
 $heroHeader      = true;
@@ -18,7 +19,9 @@ $pageSchema = [
         'Where is October Chinese Dining?' =>
             'October is at 60 George’s Street Upper, Dún Laoghaire, Co. Dublin, A96 CY53.',
         'Do you take bookings?' =>
-            'Yes. Book online for up to ' . $booking['max_guests'] . ' people, or ring ' . $site['phone'] . ' for a bigger group.',
+            booking_online()
+                ? 'Yes. Book online for up to ' . $booking['max_guests'] . ' people, or ring ' . $site['phone'] . ' for a bigger group.'
+                : 'Yes. Ring us on ' . $site['phone'] . ' to book a table.',
         'Do you serve lunch?' =>
             'Yes. The lunch menu runs from 12:30 to 16:00, with signature rice bowls, noodle soups and handmade dumplings.',
         'Are there vegetarian options?' =>
@@ -82,7 +85,7 @@ $lunchFrom = min(array_map(fn($i) => (float) $i['price'], array_merge(...array_c
         </h1>
         <p class="hero-lede reveal">Sichuan heat, Hunan chillies and Cantonese classics, cooked to share with the people you love.</p>
         <div class="hero-actions reveal">
-            <a class="btn btn-gold" href="booking.php">Book a table</a>
+            <a class="btn btn-gold" href="<?= e(book_href()) ?>"><?= e(book_label()) ?></a>
             <a class="btn btn-ghost" href="menu.php">Explore the menu</a>
         </div>
         <a class="rating-badge reveal" href="#reviews">
@@ -216,12 +219,12 @@ $lunchFrom = min(array_map(fn($i) => (float) $i['price'], array_merge(...array_c
         <div class="groups-text">
             <p class="eyebrow">Birthdays, families, teams</p>
             <h2 id="groups-title">Bringing a crowd?</h2>
-            <p>We love a long table. We have looked after a group of fifteen, with plenty to share and food that comes out fast. Book online for up to <?= (int) $booking['max_guests'] ?>, or ring us and we will set it up.</p>
+            <p>We love a long table. We have looked after a group of fifteen, with plenty to share and food that comes out fast. <?php if (booking_online()): ?>Book online for up to <?= (int) $booking['max_guests'] ?>, or ring us and we will set it up.<?php else: ?>Ring us and we will set it up.<?php endif; ?></p>
             <div class="groups-actions">
                 <?php if ($telHref): ?>
                     <a class="btn btn-gold" href="<?= e($telHref) ?>"><?= icon('phone') ?> Call <?= e($site['phone']) ?></a>
                 <?php endif; ?>
-                <a class="btn btn-ghost" href="booking.php">Book online</a>
+                <?php if (booking_online()): ?><a class="btn btn-ghost" href="booking.php">Book online</a><?php endif; ?>
             </div>
             <p class="small-note">Parties of 5 or more are subject to a 10% service charge, all of which goes directly to the staff.</p>
         </div>

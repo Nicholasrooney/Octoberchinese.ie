@@ -27,7 +27,7 @@ oct_header(
             <span class="oc-seal-bottom"><?= (int) $googleRating['count'] ?> reviews</span>
         </a>
         <ul class="oc-triad">
-            <li><a href="<?= OCT_ROOT ?>booking.php"><span class="oc-triad-en">Booking</span><span class="oc-triad-cn" lang="zh-Hans">预订餐桌</span></a></li>
+            <li><a href="<?= e(book_href(OCT_ROOT)) ?>"><span class="oc-triad-en">Booking</span><span class="oc-triad-cn" lang="zh-Hans"><?= booking_online() ? '预订餐桌' : '电话预订' ?></span></a></li>
             <li><a href="menu.php"><span class="oc-triad-en">Menu</span><span class="oc-triad-cn" lang="zh-Hans">菜单</span></a></li>
             <li><a href="gallery.php"><span class="oc-triad-en">Gallery</span><span class="oc-triad-cn" lang="zh-Hans">美味图鉴</span></a></li>
         </ul>
@@ -118,10 +118,10 @@ oct_header(
         <div class="oc-feature-text oc-reveal">
             <?= oct_eyebrow('聚会宴请', 'Groups & celebrations') ?>
             <h2 id="oc-f4">Celebrate your special moments with us.</h2>
-            <p>Birthdays, families, work teams: we love a long table, and we have looked after groups of fifteen with plenty to share and food that comes out fast. Book online for up to <?= (int) $booking['max_guests'] ?> guests, or ring us and we will set it up.</p>
+            <p>Birthdays, families, work teams: we love a long table, and we have looked after groups of fifteen with plenty to share and food that comes out fast. <?php if (booking_online()): ?>Book online for up to <?= (int) $booking['max_guests'] ?> guests, or ring us and we will set it up.<?php else: ?>Ring us and we will set it up.<?php endif; ?></p>
             <div class="oc-btn-row">
                 <?php if (oct_tel()): ?><a class="oc-btn" href="<?= e(oct_tel()) ?>">Call <?= e($site['phone']) ?></a><?php endif; ?>
-                <a class="oc-btn" href="<?= OCT_ROOT ?>booking.php">Book online</a>
+                <?php if (booking_online()): ?><a class="oc-btn" href="<?= OCT_ROOT ?>booking.php">Book online</a><?php endif; ?>
             </div>
             <p class="oc-small">Parties of 5 or more are subject to a 10% service charge, all of which goes directly to the staff.</p>
         </div>

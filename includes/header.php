@@ -23,6 +23,14 @@ $nav = [
     'booking'  => ['Book a table', 'booking.php'],
 ];
 
+// Booking and ordering can be switched off in config; their links go with them.
+if (!booking_online()) {
+    unset($nav['booking']);
+}
+if (!ordering_online()) {
+    unset($nav['order']);
+}
+
 // Catering is switched off in config, so it leaves the menu too.
 if (empty($catering['enabled'])) {
     unset($nav['catering']);
