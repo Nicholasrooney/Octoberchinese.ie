@@ -14,6 +14,7 @@ $nav = [
     'home'     => ['Home', 'index.php'],
     'menu'     => ['Menu', 'menu.php'],
     'gallery'  => ['Gallery', 'gallery.php'],
+    'order'    => ['Order', 'order.php'],
     'catering' => ['Events', 'event-catering.php'],
     'visit'    => ['Visit', 'index.php#visit'],
     // The second design (Hunan style) for the restaurant to compare. Remove
@@ -60,6 +61,9 @@ require_once __DIR__ . '/brand.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
+    <?php foreach ($pageStyles ?? [] as $css): ?>
+    <link rel="stylesheet" href="<?= e(asset($css)) ?>">
+    <?php endforeach; ?>
     <?php seo_render_schema($pageSchema ?? []); ?>
 </head>
 <body class="page-<?= e($activePage) ?><?= $heroHeader ? ' has-hero' : '' ?>">

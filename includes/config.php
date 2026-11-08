@@ -232,6 +232,52 @@ $calendar = [
 ];
 
 /*
+ * Click and collect ordering (order.php). Collection only: no delivery.
+ *
+ * Orders are for TODAY only, collected between opening time plus the prep
+ * time and closing time minus last_order_before_close. The opening hours come
+ * from $booking['service_hours'] above, so ordering follows the same hours.
+ *
+ * Payment is taken in the restaurant when the order is collected. Online card
+ * payment (e.g. SumUp) can be added later without changing the order flow.
+ */
+$ordering = [
+    // false takes order.php offline: the page says ordering is closed and
+    // points people to the phone instead.
+    'enabled' => true,
+
+    // Minutes the kitchen needs. The earliest collection time is now + this.
+    'prep_minutes' => 25,
+
+    // Collection times are offered every this many minutes.
+    'slot_minutes' => 15,
+
+    // The last collection time is this many minutes before closing.
+    'last_order_before_close' => 15,
+
+    // Orders the kitchen can take for one collection time. 0 = no limit.
+    'max_orders_per_slot' => 4,
+
+    // Lunch menu dishes can only be collected before this time.
+    'lunch_until' => '16:00',
+
+    // Smallest order in euro. 0 = no minimum.
+    'min_order' => 0,
+
+    // Most of one dish in a single order, to catch typos like 50 instead of 5.
+    'max_qty_per_item' => 20,
+
+    // Shown at checkout and in the confirmation email.
+    'payment_note' => 'Pay when you collect, by card or cash.',
+
+    // Who is emailed when an order comes in. Each person gets their own copy.
+    'notify_email' => [
+        'nicholas.rooney2010@gmail.com',
+        // add the restaurant's own inbox here
+    ],
+];
+
+/*
  * Google Analytics 4. Not a secret — it appears in every page's source.
  * Loaded only after a visitor accepts cookies; see includes/analytics.php.
  * Leave empty to switch analytics off entirely.

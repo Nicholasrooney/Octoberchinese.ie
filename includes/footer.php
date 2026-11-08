@@ -57,7 +57,7 @@
     </p>
 </footer>
 
-<?php if (($activePage ?? '') !== 'booking'): ?>
+<?php if (!in_array($activePage ?? '', ['booking', 'order'], true)): ?>
 <div class="mobile-cta" data-mobile-cta>
     <?php if ($site['phone']): ?>
         <a class="mobile-cta-call" href="tel:+353<?= e(ltrim(preg_replace('/[^0-9]/', '', $site['phone']), '0')) ?>"><?= icon('phone') ?> Call</a>
@@ -72,5 +72,8 @@ render_cookie_banner();
 ?>
 
 <script src="<?= e(asset('js/main.js')) ?>" defer></script>
+<?php foreach ($pageScripts ?? [] as $js): ?>
+<script src="<?= e(asset($js)) ?>" defer></script>
+<?php endforeach; ?>
 </body>
 </html>

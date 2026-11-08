@@ -105,3 +105,43 @@ CREATE TABLE IF NOT EXISTS settings (
     updated_at     DATETIME     NOT NULL,
     PRIMARY KEY (setting_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Click and collect orders from order.php.
+--
+-- Like catering, these tables are created on first use if missing, so the
+-- live database needs no manual step. Prices are copied onto each line at the
+-- time of ordering, so a later menu change does not rewrite an old order.
+CREATE TABLE IF NOT EXISTS orders (
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    public_token   VARCHAR(40)  NOT NULL,
+    name           VARCHAR(120) NOT NULL,
+    phone          VARCHAR(32)  NOT NULL,
+    email          VARCHAR(190) NOT NULL DEFAULT '',
+    collect_date   DATE         NOT NULL,
+    collect_time   VARCHAR(5)   NOT NULL,
+    asap           TINYINT      NOT NULL DEFAULT 0,
+    notes          TEXT         NULL,
+    subtotal       DECIMAL(8,2) NOT NULL,
+    item_count     SMALLINT     NOT NULL,
+    status         VARCHAR(20)  NOT NULL DEFAULT 'new',
+    marketing_consent TINYINT   NOT NULL DEFAULT 0,
+    created_at     DATETIME     NOT NULL,
+    updated_at     DATETIME     NOT NULL,
+    UNIQUE KEY uq_orders_token (public_token),
+    KEY idx_orders_collect (collect_date, collect_time),
+    KEY idx_orders_status  (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    order_id    INT UNSIGNED NOT NULL,
+    item_key    VARCHAR(120) NOT NULL,
+    name        VARCHAR(160) NOT NULL,
+    variant     VARCHAR(40)  NOT NULL DEFAULT '',
+    qty         SMALLINT     NOT NULL,
+    unit_price  DECIMAL(8,2) NOT NULL,
+    note        VARCHAR(200) NOT NULL DEFAULT '',
+    CONSTRAINT fk_order_items_order
+        FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    KEY idx_order_items_order (order_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

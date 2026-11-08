@@ -449,3 +449,32 @@ input:focus, select:focus, textarea:focus { border-color: var(--green); }
   /* Any button in here, whichever state it is in — it is a thumb target. */
   .weekend-switch button { width: 100%; text-align: center; }
 }
+
+/* ---------- click & collect tickets (orders.php) ---------- */
+.orders-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.orders-top .weekend-switch { margin: 0; }
+.orders-h { display: flex; align-items: center; gap: 0.5rem; margin: 1.5rem 0 0.6rem; font-size: 1.05rem; }
+.orders-h .count { background: var(--line); border-radius: 999px; padding: 0 0.55rem; font-size: 0.85rem; }
+.orders-h-new .count { background: var(--warn); color: var(--white); }
+.ticket { border-left: 6px solid var(--line); }
+.ticket-new { border-left-color: var(--warn); background: #fffaf0; }
+.ticket-accepted { border-left-color: #1d5fa8; }
+.ticket-ready { border-left-color: var(--ok); }
+.ticket-collected, .ticket-cancelled { opacity: 0.6; }
+.ticket-head { display: flex; gap: 1rem; align-items: flex-start; }
+.ticket-time { font-size: 1.6rem; font-weight: 700; line-height: 1; min-width: 4.2rem; }
+.ticket-time small { display: block; font-size: 0.7rem; letter-spacing: 0.08em; color: var(--warn); margin-top: 0.25rem; }
+.ticket-who h3 { font-size: 1.1rem; }
+.ticket-lines { list-style: none; margin: 0.75rem 0; padding: 0.75rem 0 0; border-top: 1px dashed var(--line); font-size: 1.05rem; }
+.ticket-lines li { padding: 0.2rem 0; }
+.ticket-lines em { font-style: normal; color: var(--muted); margin-left: 0.3rem; }
+.ticket-note { display: block; color: var(--bad); font-size: 0.95rem; margin-left: 1.6rem; }
+.ticket-do { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ticket-do form { margin: 0; }
+.btn-go { background: var(--green); color: var(--white); border-color: var(--green); font-weight: 600; }
+.btn-go:hover { background: var(--green-deep); }
+.btn-cancel { color: var(--bad); }
+.tag-o-new { color: var(--warn); }
+.tag-o-accepted { color: #1d5fa8; }
+.tag-o-ready, .tag-o-collected { color: var(--ok); }
+.tag-o-cancelled { color: var(--bad); }

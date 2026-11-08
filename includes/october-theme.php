@@ -37,6 +37,7 @@ function oct_header(string $title, string $description, string $active = ''): vo
     $nav = [
         'menu'    => ['Menu', 'menu.php'],
         'gallery' => ['Gallery', 'gallery.php'],
+        'order'   => ['Order', OCT_ROOT . 'order.php'],
         'booking' => ['Bookings', OCT_ROOT . 'booking.php'],
         'contact' => ['Contact', 'index.php#contact'],
     ];
