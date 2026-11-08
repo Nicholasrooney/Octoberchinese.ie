@@ -101,7 +101,7 @@ oct_header(
         <div class="oc-feature-text oc-reveal">
             <?= oct_eyebrow('午市', 'Lunch · ' . $lunchHours) ?>
             <h2 id="oc-f3">A proper bowl at lunchtime</h2>
-            <p>Signature rice bowls, Taiwanese braised beef noodle soup, wonton noodle soup and handmade dumplings<?php if (show_prices()): ?>, from €<?= e(fmt_price(number_format($lunchFrom, 2))) ?><?php endif; ?>. Every rice bowl comes with half a soy-braised egg. Add a soft drink for €1.50.</p>
+            <p>Signature rice bowls, Taiwanese braised beef noodle soup, wonton noodle soup and handmade dumplings<?php if (show_prices()): ?>, from €<?= e(fmt_price(number_format($lunchFrom, 2))) ?><?php endif; ?>. Every rice bowl comes with half a soy-braised egg.</p>
             <a class="oc-btn" href="menu.php?tab=lunch">View the lunch menu</a>
         </div>
         <figure class="oc-feature-img oc-bleed-right oc-reveal">

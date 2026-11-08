@@ -170,7 +170,7 @@ $lunchFrom = min(array_map(fn($i) => (float) $i['price'], array_merge(...array_c
         <div class="lunch-text reveal">
             <p class="eyebrow">Lunch · <?= e($lunchHours) ?></p>
             <h2 id="lunch-title">A proper bowl at <em>lunchtime</em></h2>
-            <p>Signature rice bowls, slow-braised noodle soups and handmade dumplings, from €<?= e(fmt_price(number_format($lunchFrom, 2))) ?>. Every rice bowl comes with half a soy-braised egg. Add a soft drink for €1.50.</p>
+            <p>Signature rice bowls, slow-braised noodle soups and handmade dumplings, from €<?= e(fmt_price(number_format($lunchFrom, 2))) ?>. Every rice bowl comes with half a soy-braised egg.</p>
             <ul class="lunch-list">
                 <?php foreach ([$lunchMenu[1]['items'][0], $lunchMenu[1]['items'][1], $lunchMenu[0]['items'][2], $lunchMenu[0]['items'][1]] as $li): ?>
                     <li><span><?= e($li['name']) ?></span><span class="dots" aria-hidden="true"></span><?php if (show_prices()): ?><span>€<?= e(fmt_price($li['price'])) ?></span><?php endif; ?></li>
