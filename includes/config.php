@@ -176,7 +176,11 @@ $db = [
  * the plain password in this file.
  */
 $staff = [
-    'password_hash'   => '',
+    // TEMPORARY, for testing: the staff password is 123456789. This repository
+    // is public, so this hash is effectively public too. Before real customer
+    // details go in, set a proper password with /setup.php (it is saved in
+    // includes/secrets/db.php, which overrides this line) and empty this.
+    'password_hash'   => '$2y$10$cRiUtfE473YqkG34Os0j2uUbEuujrVve8qZ6U1Quvtpa/kN/2ROdS',
     'session_hours'   => 12,
     'max_attempts'    => 5,
     'lockout_minutes' => 15,

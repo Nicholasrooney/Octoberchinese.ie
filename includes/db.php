@@ -48,15 +48,34 @@ function db_connect(array $c): PDO
     }
 
     if (empty($c['name'])) {
-        throw new RuntimeException(
-            'No database configured. Set $db in includes/config.php, and see docs/database-setup.md.'
-        );
+        // TESTING: no MySQL database set up yet, so use a small SQLite file in
+        // /data (blocked from the web by data/.htaccess, kept out of Git by
+        // .gitignore). It creates its own tables on first use, so the staff
+        // area works with no Hostinger setup. Once a MySQL database is put in
+        // includes/secrets/db.php this is no longer used.
+        return db_connect_test_file(__DIR__ . '/../data/october-test.sqlite');
     }
 
     $dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s',
         $c['host'] ?? 'localhost', $c['name'], $c['charset'] ?? 'utf8mb4');
 
     return new PDO($dsn, $c['user'] ?? '', $c['pass'] ?? '', db_options());
+}
+
+/** Opens (and on first use builds) the testing SQLite file. */
+function db_connect_test_file(string $path): PDO
+{
+    if (!in_array('sqlite', PDO::getAvailableDrivers(), true)) {
+        throw new RuntimeException('No database configured, and SQLite is not available on this server. See docs/database-setup.md.');
+    }
+    $fresh = !is_file($path);
+    $pdo   = db_connect(['driver' => 'sqlite', 'path' => $path]);
+    if ($fresh || !$pdo->query("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'customers'")->fetchColumn()) {
+        foreach (db_sql_statements((string) file_get_contents(__DIR__ . '/../db/schema.sql'), 'sqlite') as $statement) {
+            $pdo->exec($statement);
+        }
+    }
+    return $pdo;
 }
 
 function db_options(): array
