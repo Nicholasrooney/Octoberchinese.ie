@@ -157,6 +157,7 @@ function oct_footer(): void
     </div>
     <div class="oc-wrap oc-footer-legal">
         <a href="<?= OCT_ROOT ?>privacy.php">Privacy policy</a>
+        <a href="<?= OCT_ROOT ?>staff/login.php" rel="nofollow">Staff login</a>
         <button type="button" class="oc-linkbtn" data-cookie-settings>Cookie settings</button>
         <span>© <?= date('Y') ?> <?= e($site['name']) ?></span>
     </div>

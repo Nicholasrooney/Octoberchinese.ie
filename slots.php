@@ -10,6 +10,7 @@
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/hours.php';
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/booking-windows.php';
 require_once __DIR__ . '/includes/bookings.php';
 require_once __DIR__ . '/includes/capacity.php';
 
@@ -43,7 +44,7 @@ if ($parsed < $today || $parsed > $lastDay) {
 
 // Closed that day, or not taking any more? Say which, and point at the next
 // date we can actually take one.
-$daySlots = hours_slots_for_date($date);
+$daySlots = booking_public_slots($date);
 $blocked  = hours_blocked_message($date);
 
 if (!$daySlots || $blocked !== null) {
@@ -51,8 +52,8 @@ if (!$daySlots || $blocked !== null) {
         'date'      => $date,
         'closed'    => true,
         'slots'     => [],
-        'message'   => $blocked ?? 'We are closed that day.',
-        'next_open' => hours_next_open_date($date),
+        'message'   => $blocked ?? (windows_enabled() ? 'No online bookings that day.' : 'We are closed that day.'),
+        'next_open' => booking_public_next_date($date),
     ]);
     exit;
 }

@@ -31,7 +31,7 @@ if ($shownDate === '') {
     $todayFree = array_filter(booking_slot_availability($shownDate, (int) $old['guests']),
         fn($free, $t) => $free && $t > (new DateTimeImmutable('now', $tz))->format('H:i'), ARRAY_FILTER_USE_BOTH);
     if (!$todayFree) {
-        $shownDate = hours_next_open_date($today->modify('+1 day')->format('Y-m-d')) ?? $shownDate;
+        $shownDate = booking_public_next_date($today->modify('+1 day')->format('Y-m-d')) ?? $shownDate;
     }
     $old['date'] = $shownDate;
 }
@@ -75,7 +75,12 @@ for ($d = $today; $d <= $lastDay; $d = $d->modify('+1 day')) {
     $ymd = $d->format('Y-m-d');
     $label = $ymd === $today->format('Y-m-d') ? 'Today, ' . $d->format('j M')
            : ($ymd === $today->modify('+1 day')->format('Y-m-d') ? 'Tomorrow, ' . $d->format('j M') : $d->format('D j M'));
-    $dateOptions[$ymd] = [$label, hours_takes_bookings($ymd) && hours_slots_for_date($ymd)];
+    $takes = booking_public_takes_date($ymd);
+    // With booking windows, list only the days staff have opened.
+    if (windows_enabled() && !$takes) {
+        continue;
+    }
+    $dateOptions[$ymd] = [$label, $takes];
 }
 $prefOptions = hours_all_slots();
 ?>

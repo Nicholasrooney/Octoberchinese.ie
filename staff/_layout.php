@@ -32,6 +32,7 @@ function staff_head(string $title, string $active = '', bool $wide = false): voi
     <nav class="bar-nav">
         <a href="index.php"     class="<?= $active === 'day' ? 'on' : '' ?>">Today</a>
         <a href="week.php"      class="<?= $active === 'week' ? 'on' : '' ?>">Week</a>
+        <?php if (!empty($GLOBALS['booking']['windows_only'])): ?><a href="booking-windows.php" class="<?= $active === 'windows' ? 'on' : '' ?>">Booking windows</a><?php endif; ?>
         <?php if (ordering_online()): ?><a href="orders.php" class="<?= $active === 'orders' ? 'on' : '' ?>">Orders</a><?php endif; ?>
         <a href="catering.php"  class="<?= $active === 'catering' ? 'on' : '' ?>">Catering</a>
         <a href="customers.php" class="<?= $active === 'customers' ? 'on' : '' ?>">Customers</a>

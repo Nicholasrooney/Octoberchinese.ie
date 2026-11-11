@@ -14,6 +14,7 @@ require_once __DIR__ . '/bookings.php';
 require_once __DIR__ . '/capacity.php';
 require_once __DIR__ . '/mailer.php';
 require_once __DIR__ . '/calendar-sync.php';
+require_once __DIR__ . '/booking-windows.php';
 
 redirect_home_unless(booking_online());
 
@@ -95,7 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$finding) {
 
     // Which slots exist on the chosen day — the café is not open every day,
     // and weekends run an hour later than weekdays.
-    $daySlots = !isset($errors['date']) ? hours_slots_for_date($old['date']) : [];
+    // With booking windows on, only the times staff have opened count.
+    $daySlots = !isset($errors['date']) ? booking_public_slots($old['date']) : [];
 
     $blocked = !isset($errors['date']) ? hours_blocked_message($old['date']) : null;
 
@@ -107,14 +109,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$finding) {
                   . (new DateTimeImmutable($nextOpen, new DateTimeZone('Europe/Dublin')))->format('l j F') . '.'
                 : '');
     } elseif (!isset($errors['date']) && !$daySlots) {
-        $nextOpen = hours_next_open_date($old['date']);
-        $errors['date'] = 'We are closed that day.'
+        $nextOpen = booking_public_next_date($old['date']);
+        $errors['date'] = (windows_enabled() ? 'We are not taking online bookings that day.' : 'We are closed that day.')
             . ($nextOpen
                 ? ' The next day we are open is '
                   . (new DateTimeImmutable($nextOpen, new DateTimeZone('Europe/Dublin')))->format('l j F') . '.'
                 : '');
     } elseif (!in_array($old['time'], $daySlots, true)) {
-        $errors['time'] = 'Choose a time we are open.';
+        $errors['time'] = windows_enabled() ? 'That time is not open for online booking. Choose one of the times shown.' : 'Choose a time we are open.';
     } elseif ($date && $date == $today) {
         $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Dublin'));
         if ($old['time'] <= $now->format('H:i')) {
@@ -208,7 +210,7 @@ function booking_slot_availability(string $date, int $guests): array
 {
     global $booking;
 
-    $daySlots = hours_slots_for_date($date);
+    $daySlots = booking_public_slots($date);
     if (!$daySlots || hours_blocked_message($date) !== null) {
         return [];
     }

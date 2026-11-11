@@ -97,12 +97,18 @@ $booking = [
     // Filled in below from service_hours. Do not edit by hand.
     'times' => [],
     /*
-     * Online table booking on the website. false hides every "Book a table"
-     * button and link, sends booking.php back to the home page, and asks
-     * people to ring instead. Staff can still add phone bookings in the diary.
-     * Set to true to bring the booking page back.
+     * Online table booking on the website.
+     *
+     * 'online' => false hides every "Book a table" button and link, sends
+     * booking.php back to the home page, and asks people to ring instead.
+     *
+     * 'windows_only' => true means online booking is closed EXCEPT during the
+     * booking windows staff open in the staff area (Booking windows page), e.g.
+     * "tomorrow, 15:00 to 19:00". With no window open, the site behaves as if
+     * online booking were off. Staff can always add phone bookings in the diary.
      */
-    'online'            => false,
+    'online'            => true,
+    'windows_only'      => true,
 
     'max_guests'        => 8,   // bigger groups are asked to ring
     'days_ahead'        => 60,  // how far in advance people can book
@@ -451,10 +457,21 @@ function booking_seating_label(?string $seating): string
 /**
  * Whether prices are shown anywhere on the site. See $site['show_prices'].
  */
-/** Is online table booking switched on? See $booking['online']. */
+/**
+ * Is online table booking available right now? See $booking['online'] and
+ * $booking['windows_only']: with windows on, only while staff have a booking
+ * window open for today or later.
+ */
 function booking_online(): bool
 {
-    return !empty($GLOBALS['booking']['online']);
+    if (empty($GLOBALS['booking']['online'])) {
+        return false;
+    }
+    if (empty($GLOBALS['booking']['windows_only'])) {
+        return true;
+    }
+    require_once __DIR__ . '/booking-windows.php';
+    return windows_any_upcoming();
 }
 
 /** Is click and collect switched on? See $ordering['enabled']. */

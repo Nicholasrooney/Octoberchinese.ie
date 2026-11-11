@@ -145,3 +145,18 @@ CREATE TABLE IF NOT EXISTS order_items (
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     KEY idx_order_items_order (order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Booking windows: online booking is off except during the times staff open
+-- here (staff/booking-windows.php). Created on first use if missing.
+CREATE TABLE IF NOT EXISTS booking_windows (
+    id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    window_date  DATE         NOT NULL,
+    first_time   VARCHAR(5)   NOT NULL,
+    last_time    VARCHAR(5)   NOT NULL,
+    note         VARCHAR(200) NOT NULL DEFAULT '',
+    is_open      TINYINT      NOT NULL DEFAULT 1,
+    created_by   VARCHAR(80)  NOT NULL DEFAULT '',
+    created_at   DATETIME     NOT NULL,
+    updated_at   DATETIME     NOT NULL,
+    KEY idx_booking_windows_date (window_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

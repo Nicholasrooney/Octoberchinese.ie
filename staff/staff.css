@@ -478,3 +478,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--green); }
 .tag-o-accepted { color: #1d5fa8; }
 .tag-o-ready, .tag-o-collected { color: var(--ok); }
 .tag-o-cancelled { color: var(--bad); }
+
+/* ---------- booking windows (booking-windows.php) ---------- */
+.window { border-left: 6px solid var(--line); }
+.window-open { border-left-color: var(--ok); }
+.window-closed { opacity: 0.75; }
+.window-main { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.window h3 { font-size: 1.1rem; margin: 0 0 0.25rem; }
+.window-past { margin-top: 1.5rem; color: var(--muted); }
+.window-past summary { cursor: pointer; font-weight: 600; }
+.window-past ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }

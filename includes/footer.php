@@ -54,6 +54,7 @@
         &copy; <?= date('Y') ?> <?= e($site['name']) ?>
         · <a href="privacy.php">Privacy</a>
         · <button type="button" class="link-button" data-cookie-settings>Cookie settings</button>
+        · <a href="staff/login.php" rel="nofollow">Staff login</a>
     </p>
 </footer>
 
