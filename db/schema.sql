@@ -160,3 +160,30 @@ CREATE TABLE IF NOT EXISTS booking_windows (
     updated_at   DATETIME     NOT NULL,
     KEY idx_booking_windows_date (window_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Website stats from track.php: one row per page view or tap. No cookies, no
+-- IP addresses, nothing personal (see includes/stats.php). Created on first use.
+CREATE TABLE IF NOT EXISTS stats_events (
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    created_at  DATETIME     NOT NULL,
+    day         DATE         NOT NULL,
+    event       VARCHAR(40)  NOT NULL,
+    label       VARCHAR(80)  NOT NULL DEFAULT '',
+    location    VARCHAR(40)  NOT NULL DEFAULT '',
+    page        VARCHAR(60)  NOT NULL DEFAULT '',
+    source      VARCHAR(30)  NOT NULL DEFAULT '',
+    device      VARCHAR(10)  NOT NULL DEFAULT '',
+    visitor     VARCHAR(16)  NOT NULL DEFAULT '',
+    KEY idx_stats_day_event (day, event),
+    KEY idx_stats_event     (event)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Monthly numbers from outside the website, typed in on the stats page:
+-- Google Business Profile and Search Console figures.
+CREATE TABLE IF NOT EXISTS stats_monthly (
+    month       VARCHAR(7)    NOT NULL,
+    metric      VARCHAR(40)   NOT NULL,
+    value       DECIMAL(12,2) NOT NULL DEFAULT 0,
+    updated_at  DATETIME      NOT NULL,
+    PRIMARY KEY (month, metric)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

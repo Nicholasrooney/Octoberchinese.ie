@@ -250,6 +250,32 @@ $calendar = [
 ];
 
 /*
+ * Website stats (/staff/stats.php).
+ *
+ * Every visit and every tap on directions, phone, menu and booking is counted
+ * on our own server, with no cookies and nothing personal stored, so nobody is
+ * missed for declining the cookie notice. Google Analytics adds the deeper
+ * reports for visitors who accept. These are only the starting values for the
+ * money side of the dashboard; they can be changed on the stats page itself.
+ */
+$stats = [
+    'enabled' => true,
+
+    'defaults' => [
+        'avg_spend_per_head' => 35.00,  // € per person eating in
+        'avg_party_size'     => 2.5,    // people per table, for directions and calls
+        'directions_visit'   => 20,     // % of "directions" taps that turn up to eat
+        'call_conversion'    => 40,     // % of calls that become a table
+        'monthly_cost'       => 0.00,   // € the website and marketing cost a month
+    ],
+
+    // Links on the stats page to the full Google reports.
+    'ga4_property'   => '564040257',
+    'ga4_account'    => '388218537',
+    'search_console' => 'https://octoberdining.ie/',
+];
+
+/*
  * Click and collect ordering (order.php). Collection only: no delivery.
  *
  * Orders are for TODAY only, collected between opening time plus the prep
@@ -301,7 +327,9 @@ $ordering = [
  * Leave empty to switch analytics off entirely.
  */
 $analytics = [
-    'ga4_id' => '',   // create a GA4 property for October and paste its G- ID
+    // GA4 property "octoberdining.ie" (account comparemytow, property 564040257).
+    // Loads only after the visitor presses Accept on the cookie notice.
+    'ga4_id' => 'G-SRTJ33RZLS',
 ];
 
 /*

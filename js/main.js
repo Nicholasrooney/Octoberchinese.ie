@@ -221,7 +221,10 @@ function cookieChoice(set) {
     if (/waze\.com/.test(href))            return { name: 'click_directions', app: 'waze' };
     if (/google\.[a-z.]+\/maps/.test(href)) return { name: 'click_directions', app: 'google_maps' };
     if (/event-catering/.test(href))       return { name: 'click_catering' };
+    if (/search\.google\.com\/local\/writereview|g\.page\/r\//.test(href)) return { name: 'click_review' };
     if (/booking\.php/.test(href))         return { name: 'click_book_table' };
+    if (/order\.php/.test(href))           return { name: 'click_order' };
+    if (/(^|\/)october\/($|[a-z]+\.php)/.test(href) && !a.closest('.oc')) return { name: 'click_preview' };
     if (/menu\.php/.test(href))            return { name: 'click_menu' };
     if (/gallery\.php/.test(href))         return { name: 'click_gallery' };
     if (/privacy\.php/.test(href))         return { name: 'click_privacy' };

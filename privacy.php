@@ -110,6 +110,14 @@ $updated = 'November 2026';
        only loads if you accept, or if you tap “Show the map”. Google may set its
        own cookies when it loads. Otherwise you see a link that opens Google Maps
        in a new tab.</p>
+    <p><strong>Our own visit counts.</strong> So we know how the site is doing even
+       for people who say no to cookies, our server counts page views and taps
+       (for example “someone opened the menu on a phone, having come from Google”).
+       This sets no cookie and keeps no IP address, name or contact details. To
+       count each visitor once a day, we briefly combine the IP address and browser
+       type with a random code that is thrown away every midnight, so the result
+       can’t be traced back to anyone, even by us. Our legal basis is our
+       legitimate interest in understanding how our website is used.</p>
     <p><strong>Fonts.</strong> The fonts on this site are stored on our own server,
        so viewing a page does not send your details to Google or anyone else.</p>
     <p><strong>Your choice.</strong> We remember your choice in your own browser
