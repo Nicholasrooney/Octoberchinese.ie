@@ -46,7 +46,7 @@
                         <div><dt><?= e($days) ?></dt><dd><?= e($time) ?></dd></div>
                     <?php endforeach; ?>
                 </dl>
-                <p class="footer-small">Lunch menu 12:30 – 16:00</p>
+                <p class="footer-small">Lunch menu 12:30 – 16:00, Wed – Sun</p>
             </div>
         <?php endif; ?>
     </div>

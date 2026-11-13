@@ -116,7 +116,7 @@ function oct_footer(): void
                 <?php foreach ($hours as $days => $time): ?>
                     <div><dt><?= e($days) ?></dt><dd><?= e($time) ?></dd></div>
                 <?php endforeach; ?>
-                <div><dt>Lunch menu</dt><dd>12:30 to 16:00</dd></div>
+                <div><dt>Lunch menu</dt><dd>12:30 to 16:00, Wed – Sun</dd></div>
             </dl>
         </div>
         <div class="oc-reveal">

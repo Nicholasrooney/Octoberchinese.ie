@@ -211,7 +211,7 @@ $menu = [
  * Lunch menu, 12:30 – 16:00. Kept apart from the à la carte so the menu page
  * can show it under its own tab.
  */
-$lunchHours = '12:30 – 16:00';
+$lunchHours = '12:30 – 16:00, Wednesday to Sunday';
 
 $lunchMenu = [
     [

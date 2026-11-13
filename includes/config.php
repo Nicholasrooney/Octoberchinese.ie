@@ -46,15 +46,14 @@ $booking = [
      * form offers.
      */
     'service_hours' => [
-        // ASSUMED from Google ("closes 9:30 PM") and the lunch menu (from
-        // 12:30). Confirm with the restaurant before going live.
-        'mon' => ['12:30', '21:30'],
-        'tue' => ['12:30', '21:30'],
+        // Confirmed by the restaurant, 13 Nov 2026.
+        'mon' => null,                 // closed
+        'tue' => ['15:30', '21:30'],
         'wed' => ['12:30', '21:30'],
         'thu' => ['12:30', '21:30'],
-        'fri' => ['12:30', '21:30'],
-        'sat' => ['12:30', '21:30'],
-        'sun' => ['12:30', '21:30'],
+        'fri' => ['12:30', '22:00'],
+        'sat' => ['12:30', '22:00'],
+        'sun' => ['12:30', '21:00'],
     ],
 
     // How often a slot comes round, in minutes.

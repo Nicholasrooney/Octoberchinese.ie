@@ -23,7 +23,7 @@ $pageSchema = [
                 ? 'Yes. Book online for up to ' . $booking['max_guests'] . ' people, or ring ' . $site['phone'] . ' for a bigger group.'
                 : 'Yes. Ring us on ' . $site['phone'] . ' to book a table.',
         'Do you serve lunch?' =>
-            'Yes. The lunch menu runs from 12:30 to 16:00, with signature rice bowls, noodle soups and handmade dumplings.',
+            'Yes. The lunch menu runs from 12:30 to 16:00, Wednesday to Sunday, with signature rice bowls, noodle soups and handmade dumplings.',
         'Are there vegetarian options?' =>
             'Yes. Vegetarian dishes are marked on the menu, including smashed cucumber salad, dry-fried green beans, crispy aubergines, tofu claypot and vegetable dumplings.',
         'Do you cater for allergies?' =>
