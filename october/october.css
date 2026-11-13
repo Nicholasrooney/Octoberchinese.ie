@@ -83,7 +83,7 @@ p { margin: 0 0 1em; }
     padding: 26px 24px 0; color: var(--peach);
 }
 .oc-logo { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--peach); }
-.oc-logo-mark { width: 72px; height: auto; color: var(--gold); margin-bottom: 6px; }
+.oc-logo-mark { width: 64px; height: 64px; color: var(--gold); margin-bottom: 6px; }
 .oc-logo-word { font-family: var(--serif); font-size: 1.85rem; letter-spacing: .32em; text-transform: uppercase; padding-left: .32em; line-height: 1; }
 .oc-logo-sub { font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; opacity: .7; margin-top: 8px; }
 .oc-nav ul { display: flex; gap: 28px; list-style: none; margin: 34px 0 0; padding: 0; }
@@ -196,7 +196,7 @@ p { margin: 0 0 1em; }
 .oc-footer-list dd { margin: 0; text-align: right; }
 .oc-footer-list a { text-decoration: none; }
 .oc-footer-centre { text-align: center; }
-.oc-footer-mark { width: 96px; height: auto; color: var(--gold); margin: 0 auto 14px; }
+.oc-footer-mark { width: 84px; height: 84px; color: var(--gold); margin: 0 auto 14px; }
 .oc-footer-motto { font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; opacity: .8; line-height: 1.8; }
 .oc-footer-right { text-align: center; }
 .oc-footer-link { font-size: .85rem; }

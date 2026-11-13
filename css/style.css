@@ -176,7 +176,7 @@ p { margin: 0 0 1em; }
 }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--gold); }
-.brand-mark { width: 60px; height: auto; color: var(--gold); }
+.brand-mark { width: 54px; height: 54px; color: var(--gold); }
 .brand-text { display: flex; flex-direction: column; line-height: 1; }
 .brand-name { font-family: var(--serif); font-size: 1.7rem; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-2); }
 .brand-sub { font-size: .62rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(244, 237, 224, .7); margin-top: 6px; }
@@ -698,7 +698,7 @@ p { margin: 0 0 1em; }
 .site-footer { position: relative; background: var(--ink); color: rgba(244, 237, 224, .78); padding: 90px 0 30px; overflow: hidden; font-size: .95rem; }
 .footer-arches { right: -60px; bottom: 0; width: 640px; height: 80%; opacity: .1; }
 .footer-inner { position: relative; max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 40px; }
-.brand-footer .brand-mark { width: 70px; height: auto; }
+.brand-footer .brand-mark { width: 64px; height: 64px; }
 .footer-motto { font-family: var(--serif); font-style: italic; font-size: 1.3rem; color: var(--gold-2); margin-top: 22px; }
 .footer-heading { font-size: .72rem; letter-spacing: .26em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
 .footer-col p { margin: 0 0 8px; }
