@@ -11,7 +11,7 @@ function render_tree_mark(string $class = '', string $root = ''): void
 {
     // The October tree, cut from the restaurant's own logo.
     ?>
-    <img class="<?= e($class) ?> tree-mark-img" src="<?= e($root) ?>images/logo/tree-mark.png" alt="" width="64" height="64" aria-hidden="true">
+    <img class="<?= e($class) ?> tree-mark-img" src="<?= e($root) ?>images/logo/tree-mark.png" alt="" width="64" height="43" aria-hidden="true">
     <?php
 }
 
