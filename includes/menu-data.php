@@ -16,6 +16,7 @@
  *   extra           further lines (choices, notes)
  *   veg / seafood / chef   true to show the matching icon
  *   spice           0–5 chillies, as printed on the menu
+ *   photo           optional picture of the dish, e.g. '/images/menu/roast-duck.jpg'
  */
 
 $allergenKey = [
@@ -43,7 +44,7 @@ function dish(string $name, string $cn, string $price, array $allergens, string 
     return array_merge([
         'name' => $name, 'cn' => $cn, 'price' => $price, 'allergens' => $allergens,
         'desc' => $desc, 'extra' => [], 'veg' => false, 'seafood' => false,
-        'chef' => false, 'spice' => 0, 'price_label' => '', 'more_prices' => [],
+        'chef' => false, 'spice' => 0, 'price_label' => '', 'more_prices' => [], 'photo' => '',
     ], $opts);
 }
 }
@@ -263,3 +264,15 @@ $lunchMenu = [
 
 // Printed at the foot of the à la carte menu.
 $serviceNote = 'Parties of 5 or more are subject to a 10% service charge, all of which goes directly to the staff working at the time.';
+
+/*
+ * Staff changes from staff/menu.php (prices, names, photos, hidden or new
+ * dishes) are applied on top of the typed-in menu above. The typed-in arrays
+ * stay available as $menuTyped / $lunchMenuTyped for the staff editor.
+ */
+require_once __DIR__ . '/menu-edits.php';
+$menuTyped      = $menu;
+$lunchMenuTyped = $lunchMenu;
+$menuBuilt      = menu_build($menuTyped, $lunchMenuTyped);
+$menu           = $menuBuilt['alacarte'];
+$lunchMenu      = $menuBuilt['lunch'];

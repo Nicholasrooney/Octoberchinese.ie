@@ -75,7 +75,12 @@ function order_catalogue(): array
     $items    = [];
     $sources  = [['alacarte', $menu], ['lunch', $lunchMenu]];
 
+    $allowed = $GLOBALS['ordering']['menus'] ?? ['alacarte', 'lunch'];
+
     foreach ($sources as [$menuKey, $menuSections]) {
+        if (!in_array($menuKey, $allowed, true)) {
+            continue;
+        }
         foreach ($menuSections as $sec) {
             // "Add a soft drink for €1.50" in a lunch section intro becomes a tick box.
             $addons = [];
@@ -182,6 +187,10 @@ function order_slots(?DateTimeImmutable $now = null, ?array $taken = null): arra
     $open  = new DateTimeImmutable("$today {$window[0]}", order_tz());
     $close = (new DateTimeImmutable("$today {$window[1]}", order_tz()))
         ->modify('-' . (int) $ordering['last_order_before_close'] . ' minutes');
+    if (!empty($ordering['collect_until'])) {
+        $until = new DateTimeImmutable("$today {$ordering['collect_until']}", order_tz());
+        $close = min($close, $until);
+    }
 
     // Earliest: opening time or now, plus prep, rounded up to the next step.
     $start = max($open, $now)->modify("+$prep minutes");
@@ -255,8 +264,9 @@ function order_closed_message(?DateTimeImmutable $now = null): ?string
               . ' from ' . $w[0] . '.';
     }
 
+    $lunchOnly = !empty($ordering['collect_until']);
     return hours_for_date($today)
-        ? 'We are not taking any more orders for collection today.' . $when
+        ? ($lunchOnly ? 'Online orders are for lunch, collected by ' . $ordering['collect_until'] . '. We are not taking any more today.' : 'We are not taking any more orders for collection today.') . $when
         : 'We are closed today.' . $when;
 }
 
@@ -316,8 +326,8 @@ function order_price_basket(array $basket, string $collectTime): array
             }
         }
 
-        if ($item['menu'] === 'lunch' && $collectTime >= $ordering['lunch_until']) {
-            throw new OrderError($item['name'] . ' is on the lunch menu, which is only for collection before ' . $ordering['lunch_until'] . '. Choose an earlier time or remove it.');
+        if ($item['menu'] === 'lunch' && $collectTime > $ordering['lunch_until']) {
+            throw new OrderError($item['name'] . ' is on the lunch menu, which is only for collection up to ' . $ordering['lunch_until'] . '. Choose an earlier time or remove it.');
         }
 
         $note = trim(preg_replace('/\s+/', ' ', (string) ($row['note'] ?? '')));

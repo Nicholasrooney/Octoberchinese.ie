@@ -355,3 +355,7 @@ p { margin: 0 0 1em; }
 
 /* Real October logo tree (round, on black) */
 .tree-mark-img { display: block; object-fit: contain; }
+
+/* Dish photos added by staff */
+.oc-dish-photo { float: right; width: 92px; height: 92px; object-fit: cover; border-radius: 8px; margin: 2px 0 8px 16px; }
+.oc-dish.has-photo::after { content: ""; display: block; clear: both; }

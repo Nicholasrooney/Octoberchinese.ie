@@ -103,20 +103,20 @@
     $('[data-basket-field]').value = JSON.stringify(basket);
   }
 
-  // Lunch dishes can only be collected before lunchUntil
+  // Lunch dishes can only be collected up to lunchUntil
   function checkLunch() {
     var warn = $('[data-lunch-warn]'), sel = $('[data-time]');
     var hasLunch = basket.some(function (l) { return ITEMS[l.key].menu === 'lunch'; });
     var time = sel && sel.value === 'asap' ? (sel.options[1] ? sel.options[1].value : '') : (sel ? sel.value : '');
-    var bad = hasLunch && time && time >= DATA.lunchUntil;
+    var bad = hasLunch && time && time > DATA.lunchUntil;
     warn.hidden = !bad;
-    if (bad) warn.textContent = 'Lunch menu dishes are for collection before ' + DATA.lunchUntil + '. Choose an earlier time or remove them.';
+    if (bad) warn.textContent = 'Lunch menu dishes are for collection up to ' + DATA.lunchUntil + '. Choose an earlier time or remove them.';
     var place = $('[data-place]');
     if (place) place.disabled = !!bad;
     // Mark lunch times that would not work
     if (sel) $$('option', sel).forEach(function (o) {
       var v = o.value === 'asap' ? (sel.options[1] ? sel.options[1].value : '') : o.value;
-      o.disabled = hasLunch && v >= DATA.lunchUntil;
+      o.disabled = hasLunch && v > DATA.lunchUntil;
     });
   }
 

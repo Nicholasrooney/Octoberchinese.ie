@@ -24,6 +24,7 @@ function staff_head(string $title, string $active = '', bool $wide = false): voi
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title><?= e($title) ?> · October staff</title>
+<link rel="icon" href="../favicon.ico?v=3" sizes="any">
 <link rel="stylesheet" href="<?= e(asset('staff/staff.css')) ?>">
 </head>
 <body>
@@ -33,7 +34,9 @@ function staff_head(string $title, string $active = '', bool $wide = false): voi
         <a href="index.php"     class="<?= $active === 'day' ? 'on' : '' ?>">Today</a>
         <a href="week.php"      class="<?= $active === 'week' ? 'on' : '' ?>">Week</a>
         <?php if (!empty($GLOBALS['booking']['windows_only'])): ?><a href="booking-windows.php" class="<?= $active === 'windows' ? 'on' : '' ?>">Booking windows</a><?php endif; ?>
-        <?php if (ordering_online()): ?><a href="orders.php" class="<?= $active === 'orders' ? 'on' : '' ?>">Orders</a><?php endif; ?>
+        <a href="orders.php"    class="<?= $active === 'orders' ? 'on' : '' ?>">Orders</a>
+        <a href="menu.php"      class="<?= $active === 'menu' ? 'on' : '' ?>">Menu</a>
+        <a href="photos.php"    class="<?= $active === 'photos' ? 'on' : '' ?>">Photos</a>
         <?php if (!empty($GLOBALS['catering']['enabled'])): ?><a href="catering.php"  class="<?= $active === 'catering' ? 'on' : '' ?>">Catering</a><?php endif; ?>
         <a href="stats.php"     class="<?= $active === 'stats' ? 'on' : '' ?>">Stats</a>
         <a href="customers.php" class="<?= $active === 'customers' ? 'on' : '' ?>">Customers</a>

@@ -70,6 +70,11 @@ staff_head('Orders', 'orders');
 
 <?php if ($flash): ?><p class="flash"><?= e($flash) ?></p><?php endif; ?>
 
+<?php if (!ordering_online()): ?>
+    <p class="flash flash-warn">Click and collect is <strong>switched off</strong> on the website, so no new orders can come in.
+        It will sell the lunch menu (set it up in <a href="menu.php?m=lunch">Menu → Lunch menu</a>), for collection from opening time until <?= e($ordering['collect_until'] ?? '16:00') ?>.</p>
+<?php endif; ?>
+
 <div class="orders-top">
     <div>
         <h1>Collection orders</h1>

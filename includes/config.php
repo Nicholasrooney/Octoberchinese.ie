@@ -287,6 +287,7 @@ $stats = [
 $ordering = [
     // false takes ordering off the site: the Order link disappears and
     // order.php sends people back to the home page. Set to true to bring it back.
+    // OFF until the click and collect lunch menu is ready (Nick, 13 Nov 2026).
     'enabled' => false,
 
     // Minutes the kitchen needs. The earliest collection time is now + this.
@@ -301,7 +302,15 @@ $ordering = [
     // Orders the kitchen can take for one collection time. 0 = no limit.
     'max_orders_per_slot' => 4,
 
-    // Lunch menu dishes can only be collected before this time.
+    // Click and collect is for lunch: from opening time until this time.
+    // The last collection time offered is this one. Applies to every dish.
+    'collect_until' => '16:00',
+
+    // Which menus can be ordered online. Lunch only, set 13 Nov 2026.
+    // ('alacarte' is the full menu; add it here to offer that too.)
+    'menus' => ['lunch'],
+
+    // Lunch menu dishes can be collected up to and including this time.
     'lunch_until' => '16:00',
 
     // Smallest order in euro. 0 = no minimum.

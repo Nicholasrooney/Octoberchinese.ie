@@ -47,6 +47,8 @@ function oct_header(string $title, string $description, string $active = ''): vo
     if (!ordering_online()) {
         unset($nav['order']);
     }
+    require_once __DIR__ . '/menu-edits.php';
+    photos_start_buffer();   // swaps in any photos staff replaced (staff/photos.php)
     ?>
 <!DOCTYPE html>
 <html lang="en-IE">
@@ -59,9 +61,10 @@ function oct_header(string $title, string $description, string $active = ''): vo
     <?php /* A design preview: keep it out of Google so it doesn't compete with the main pages. */ ?>
     <meta name="robots" content="noindex, follow">
     <meta name="theme-color" content="#16302f">
-    <link rel="icon" type="image/png" sizes="64x64" href="<?= OCT_ROOT ?>images/logo/favicon-64.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= OCT_ROOT ?>images/logo/favicon-32.png">
-    <link rel="apple-touch-icon" href="<?= OCT_ROOT ?>images/logo/apple-touch-icon.png">
+    <link rel="icon" href="<?= OCT_ROOT ?>favicon.ico?v=3" sizes="any">
+    <link rel="icon" type="image/png" sizes="64x64" href="<?= OCT_ROOT ?>images/logo/favicon-64.png?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= OCT_ROOT ?>images/logo/favicon-32.png?v=3">
+    <link rel="apple-touch-icon" href="<?= OCT_ROOT ?>images/logo/apple-touch-icon.png?v=3">
     <?php render_analytics_head(); ?>
     <link rel="stylesheet" href="<?= e(asset('fonts/fonts.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('october/october.css')) ?>">

@@ -18,7 +18,10 @@ $current = isset($_GET['tab'], $tabs[$_GET['tab']]) ? $_GET['tab'] : 'alacarte';
 function oct_dish(array $d, array $allergenKey): void
 {
     ?>
-    <li class="oc-dish">
+    <li class="oc-dish<?= !empty($d['photo']) ? ' has-photo' : '' ?>">
+        <?php if (!empty($d['photo'])): ?>
+            <img class="oc-dish-photo" src="<?= e($d['photo']) ?>" alt="<?= e($d['name']) ?>" loading="lazy" width="96" height="96">
+        <?php endif; ?>
         <div class="oc-dish-top">
             <h4><?= e($d['name']) ?>
                 <?php if ($d['chef']): ?><span class="oc-tag" title="Chef’s recommendation"><?= icon('chef') ?></span><?php endif; ?>

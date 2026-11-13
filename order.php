@@ -86,7 +86,7 @@ $errAttr    = fn($f) => isset($orderErrors[$f]) ? ' aria-invalid="true" aria-des
             <?php if ($sec['menu'] === 'lunch' && !$lunchShown): $lunchShown = true; ?>
                 <div class="order-lunch-banner">
                     <h2>Lunch menu</h2>
-                    <p>For collection before <?= e($ordering['lunch_until']) ?>.</p>
+                    <p>For collection up to <?= e($ordering['lunch_until']) ?>.</p>
                 </div>
             <?php endif; ?>
             <section class="order-sec" id="sec-<?= e($sec['id']) ?>" aria-labelledby="h-<?= e($sec['id']) ?>">

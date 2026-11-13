@@ -16,6 +16,7 @@ $booking['service_hours'] = array_fill_keys(['mon', 'tue', 'wed', 'thu', 'fri', 
 $ordering = array_merge($ordering, [
     'enabled' => true, 'prep_minutes' => 25, 'slot_minutes' => 15, 'last_order_before_close' => 15,
     'max_orders_per_slot' => 2, 'lunch_until' => '16:00', 'min_order' => 0, 'max_qty_per_item' => 20,
+    'menus' => ['alacarte', 'lunch'], 'collect_until' => '',
 ]);
 
 section('Catalogue');

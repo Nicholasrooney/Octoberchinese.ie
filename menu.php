@@ -48,7 +48,10 @@ function render_menu_sections(array $sections, array $allergenKey, array $photos
 
             <ul class="menu-items">
                 <?php foreach ($section['items'] as $item): ?>
-                    <li class="menu-item" data-veg="<?= $item['veg'] ? '1' : '0' ?>">
+                    <li class="menu-item<?= !empty($item['photo']) ? ' has-photo' : '' ?>" data-veg="<?= $item['veg'] ? '1' : '0' ?>">
+                        <?php if (!empty($item['photo'])): ?>
+                            <img class="mi-photo" src="<?= e($item['photo']) ?>" alt="<?= e($item['name']) ?>" loading="lazy" width="96" height="96">
+                        <?php endif; ?>
                         <div class="menu-item-top">
                             <h3>
                                 <span class="mi-name"><?= e($item['name']) ?></span>

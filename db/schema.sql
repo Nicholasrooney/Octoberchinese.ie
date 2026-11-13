@@ -187,3 +187,62 @@ CREATE TABLE IF NOT EXISTS stats_monthly (
     updated_at  DATETIME      NOT NULL,
     PRIMARY KEY (month, metric)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Staff menu editor (staff/menu.php). Each row changes, hides or adds a dish.
+-- Dishes typed into includes/menu-data.php keep that as their starting point;
+-- a row here wins. Created on first use if missing.
+CREATE TABLE IF NOT EXISTS menu_edits (
+    item_key     VARCHAR(160) NOT NULL PRIMARY KEY,
+    menu         VARCHAR(20)  NOT NULL,
+    section_key  VARCHAR(80)  NOT NULL,
+    name         VARCHAR(160) NOT NULL,
+    cn           VARCHAR(80)  NOT NULL DEFAULT '',
+    price        VARCHAR(12)  NOT NULL DEFAULT '',
+    description  VARCHAR(500) NOT NULL DEFAULT '',
+    allergens    VARCHAR(100) NOT NULL DEFAULT '',
+    veg          TINYINT      NOT NULL DEFAULT 0,
+    spice        TINYINT      NOT NULL DEFAULT 0,
+    photo_id     INT UNSIGNED NULL,
+    hidden       TINYINT      NOT NULL DEFAULT 0,
+    is_new       TINYINT      NOT NULL DEFAULT 0,
+    sort_order   INT          NOT NULL DEFAULT 0,
+    updated_by   VARCHAR(80)  NOT NULL DEFAULT '',
+    updated_at   DATETIME     NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Menu sections changed or added by staff.
+CREATE TABLE IF NOT EXISTS menu_sections (
+    section_key  VARCHAR(80)  NOT NULL PRIMARY KEY,
+    menu         VARCHAR(20)  NOT NULL,
+    title        VARCHAR(120) NOT NULL,
+    cn           VARCHAR(60)  NOT NULL DEFAULT '',
+    note         VARCHAR(120) NOT NULL DEFAULT '',
+    intro        VARCHAR(500) NOT NULL DEFAULT '',
+    hidden       TINYINT      NOT NULL DEFAULT 0,
+    is_new       TINYINT      NOT NULL DEFAULT 0,
+    sort_order   INT          NOT NULL DEFAULT 0,
+    updated_by   VARCHAR(80)  NOT NULL DEFAULT '',
+    updated_at   DATETIME     NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Photos uploaded by staff. Kept in the database, not on disk, so a fresh
+-- deploy from Git can never lose them. Served by photo.php.
+CREATE TABLE IF NOT EXISTS photos (
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mime        VARCHAR(30)  NOT NULL,
+    width       INT          NOT NULL DEFAULT 0,
+    height      INT          NOT NULL DEFAULT 0,
+    bytes       INT          NOT NULL DEFAULT 0,
+    label       VARCHAR(160) NOT NULL DEFAULT '',
+    data        LONGBLOB     NOT NULL,
+    created_by  VARCHAR(80)  NOT NULL DEFAULT '',
+    created_at  DATETIME     NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- A site photo (images/...) replaced by an uploaded one (staff/photos.php).
+CREATE TABLE IF NOT EXISTS photo_swaps (
+    path        VARCHAR(190) NOT NULL PRIMARY KEY,
+    photo_id    INT UNSIGNED NOT NULL,
+    updated_by  VARCHAR(80)  NOT NULL DEFAULT '',
+    updated_at  DATETIME     NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
