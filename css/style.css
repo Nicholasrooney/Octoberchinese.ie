@@ -758,7 +758,7 @@ p { margin: 0 0 1em; }
 @media (max-width: 700px) { .menu-section, .anchor { scroll-margin-top: calc(var(--header-h) + 170px); } }
 .field .consent-label { text-transform: none; letter-spacing: 0; font-size: .9rem; font-weight: 400; color: #3b4842; }
 
-/* ---------- Alternative first image (index.php?hero=a|b|c) ----------
+/* ---------- Home page first image ----------
    Split layout: the words sit on solid black on the left, the photo fills the
    right and fades into the black, so text never sits over the food. */
 .hero-split { background: #050807; }
@@ -775,9 +775,6 @@ p { margin: 0 0 1em; }
 .hero-split .hero-word { font-size: clamp(3.2rem, 6vw, 6.4rem); letter-spacing: .1em; }
 .hero-split .hero-cn { font-size: clamp(1.6rem, 3vw, 2.6rem); }
 .hero-split .hero-lede { max-width: 26ch; }
-.hero-split-a .hero-media { width: 58%; }
-.hero-split-c .hero-media { width: 56%; }
-.hero-split-d .hero-media { width: 60%; }
 
 @media (max-width: 900px) {
     .hero-split { flex-direction: column; align-items: stretch; justify-content: flex-end; }
@@ -788,5 +785,4 @@ p { margin: 0 0 1em; }
     }
     .hero-split .hero-media::after { display: block; inset: 0 0 auto 0; height: 110px; background: linear-gradient(180deg, rgba(5, 8, 7, .75), transparent); }
     .hero-split .hero-inner { padding-top: 0; margin-top: -40px; position: relative; z-index: 1; }
-    .hero-split-a .hero-media, .hero-split-d .hero-media { width: 100%; }
 }
