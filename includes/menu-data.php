@@ -72,7 +72,7 @@ $menu = [
                 'In hot Sichuan sauce.', ['chef' => true, 'spice' => 4]),
             dish('Stir-fried Beef Fillet', '野山椒小炒牛', '22.50', ['1W', '9', '11', '12'],
                 'With wild chilli pepper.', ['spice' => 3]),
-            dish('Steamed Sea Bass', '清蒸鲈鱼', '20.50', ['4', '9', '11'],
+            dish('Steamed Sea Bass', '清蒸鲈鱼', '22.50', ['4', '9', '11'],
                 'With ginger, scallion and soy sauce.', ['seafood' => true]),
             dish('Steamed Sea Bass with Hunan Chopped Chillies', '剁椒蒸鲈鱼', '22.50', ['4', '9', '11'],
                 'With chopped chillies.', ['chef' => true, 'spice' => 3]),
