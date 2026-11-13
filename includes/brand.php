@@ -7,22 +7,11 @@
 
 if (!function_exists('render_tree_mark')) {
 
-function render_tree_mark(string $class = ''): void
+function render_tree_mark(string $class = '', string $root = ''): void
 {
+    // The October tree, cut from the restaurant's own logo.
     ?>
-    <svg class="<?= e($class) ?>" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-        <g fill="currentColor">
-            <circle cx="32" cy="17" r="9"/>
-            <circle cx="21" cy="22" r="8"/>
-            <circle cx="43" cy="22" r="8"/>
-            <circle cx="15" cy="31" r="6.5"/>
-            <circle cx="49" cy="31" r="6.5"/>
-            <circle cx="26" cy="30" r="7.5"/>
-            <circle cx="38" cy="30" r="7.5"/>
-        </g>
-        <path d="M32 58V34M32 44l-8-8M32 40l7-7M32 58c-3-2-8-2-12 0M32 58c3-2 8-2 12 0"
-              fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-    </svg>
+    <img class="<?= e($class) ?> tree-mark-img" src="<?= e($root) ?>images/logo/tree-mark.png" alt="" width="64" height="64" aria-hidden="true">
     <?php
 }
 

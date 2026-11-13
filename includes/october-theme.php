@@ -59,7 +59,9 @@ function oct_header(string $title, string $description, string $active = ''): vo
     <?php /* A design preview: keep it out of Google so it doesn't compete with the main pages. */ ?>
     <meta name="robots" content="noindex, follow">
     <meta name="theme-color" content="#16302f">
-    <link rel="icon" type="image/svg+xml" href="<?= OCT_ROOT ?>images/favicon.svg">
+    <link rel="icon" type="image/png" sizes="64x64" href="<?= OCT_ROOT ?>images/logo/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= OCT_ROOT ?>images/logo/favicon-32.png">
+    <link rel="apple-touch-icon" href="<?= OCT_ROOT ?>images/logo/apple-touch-icon.png">
     <?php render_analytics_head(); ?>
     <link rel="stylesheet" href="<?= e(asset('fonts/fonts.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset('october/october.css')) ?>">
@@ -69,7 +71,7 @@ function oct_header(string $title, string $description, string $active = ''): vo
 
 <header class="oc-header" data-oc-header>
     <a class="oc-logo" href="index.php" aria-label="<?= e($site['name']) ?> home">
-        <?php render_tree_mark('oc-logo-mark'); ?>
+        <?php render_tree_mark('oc-logo-mark', OCT_ROOT); ?>
         <span class="oc-logo-word">October</span>
         <span class="oc-logo-sub"><span lang="zh-Hans"><?= e($site['name_cn']) ?></span> · Chinese Dining</span>
     </a>
@@ -142,7 +144,7 @@ function oct_footer(): void
             </dl>
         </div>
         <div class="oc-footer-col oc-footer-centre">
-            <?php render_tree_mark('oc-footer-mark'); ?>
+            <?php render_tree_mark('oc-footer-mark', OCT_ROOT); ?>
             <p class="oc-footer-motto"><span lang="zh-Hans">食悦</span><br>Good food brings<br>people together</p>
         </div>
         <div class="oc-footer-col oc-footer-right">

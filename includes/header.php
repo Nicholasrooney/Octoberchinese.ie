@@ -63,7 +63,9 @@ require_once __DIR__ . '/brand.php';
     <meta property="og:image" content="<?= e(seo_url($pageImage ?? 'images/og-image.jpg')) ?>">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#0f1f19">
-    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="icon" type="image/png" sizes="64x64" href="images/logo/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo/favicon-32.png">
+    <link rel="apple-touch-icon" href="images/logo/apple-touch-icon.png">
     <?php render_analytics_head(); ?>
     <?php /* Fonts are served from this site, not Google, so nothing is sent to a third party before consent. */ ?>
     <link rel="stylesheet" href="<?= e(asset('fonts/fonts.css')) ?>">

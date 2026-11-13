@@ -352,3 +352,6 @@ p { margin: 0 0 1em; }
     .lightbox figure { padding: 70px 12px; }
     .lb-prev, .lb-next { top: auto; bottom: 14px; transform: none; }
 }
+
+/* Real October logo tree (round, on black) */
+.tree-mark-img { display: block; border-radius: 50%; object-fit: cover; }
